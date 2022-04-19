@@ -11,4 +11,10 @@ public class EssentialsTest {
         assertEquals(4, 2 + 2);
     }
 
+    @Test
+    public void jupiterTest2() {
+        String danila = "Danila" + 56 + " is a slacker";
+        assertEquals(danila, "Danila56 is a slacker");
+    }
+
 }
