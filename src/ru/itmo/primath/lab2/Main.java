@@ -1,16 +1,21 @@
 package ru.itmo.primath.lab2;
 
-import ru.itmo.primath.lab2.methods.ConstStepMethod;
-import ru.itmo.primath.lab2.methods.Method;
-import ru.itmo.primath.lab2.util.Pair;
+import ru.itmo.primath.lab2.methods.ConstantStepGDMinimizer;
+import ru.itmo.primath.lab2.util.Path;
+
+import static ru.itmo.primath.lab2.util.TemporaryFunctionStorage.squareFunction1;
 
 public class Main {
 
     public static void main(String[] args) {
-        Method constStepMethod = new ConstStepMethod(new Pair<>(20d, 20d), 0.1, 1E-7);
-        var coords = constStepMethod.minimizeFunc(0);
-        System.out.println(coords.getCoords(coords.getIterationsNumber()).toString());
-        System.out.println("Iterations: " + coords.getIterationsNumber());
+        var constStepMinimizer = new ConstantStepGDMinimizer(0.1d);
+        Path path = constStepMinimizer.minimize(squareFunction1, new Vector2(20d, 20d), 1E-7, 5);
+        System.out.println(path.last());
+        System.out.println("Iterations: " + path.length());
+
+        path.getPoints().forEach(p -> {
+            System.out.println(p);
+        });
     }
 
 }
