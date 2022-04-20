@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Coordinates {
-    private final List<Pair<Double>> coordsList;
+    private final List<Pair<Double>> coordsList; // list of all coordinates, result coordinates are in the end
     private int iterations;
 
     public Coordinates(double x, double y) {

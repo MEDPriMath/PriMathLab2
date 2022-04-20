@@ -3,6 +3,9 @@ package ru.itmo.primath.lab2.util;
 import java.util.List;
 import java.util.function.BiFunction;
 
+// temporary solution for containing different methods and their gradients
+// all functions and gradients are hardcoded, any reasonable solution is welcome
+// P.S. BiFunctions one love <3
 public class TemporaryFuncAndGradStorage {
     // todo: придумать нормальную хуйню для хранения функций и создания их градиента, а то кринге
 

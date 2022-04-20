@@ -7,6 +7,7 @@ import ru.itmo.primath.lab2.util.TemporaryFuncAndGradStorage;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public abstract class Method {
     protected final Pair<Double> points;
     protected final double eps;
@@ -19,6 +20,7 @@ public abstract class Method {
         this.eps = eps;
     }
 
+    // minimizes all functions in a row
     public List<Coordinates> minimizeAllFunc() {
         List<Coordinates> result = new ArrayList<>();
         for (int i = 0; i < funcAndGradStorage.getNumberOfFunctions(); i++) {
@@ -28,5 +30,6 @@ public abstract class Method {
         return result;
     }
 
+    // minimizes single function
     public abstract Coordinates minimizeFunc(int funcNumber);
 }
