@@ -2,11 +2,11 @@ package ru.itmo.primath.lab2.util;
 
 import java.util.Objects;
 
-public class Pair<T> {
+public class Point<T> {
     public T x;
     public T y;
 
-    public Pair(T x, T y) {
+    public Point(T x, T y) {
         this.x = x;
         this.y = y;
     }
@@ -23,7 +23,7 @@ public class Pair<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Pair<?> pair = (Pair<?>) o;
+        Point<?> pair = (Point<?>) o;
         return Objects.equals(x, pair.x) && Objects.equals(y, pair.y);
     }
 
