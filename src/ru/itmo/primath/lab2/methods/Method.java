@@ -1,27 +1,26 @@
 package ru.itmo.primath.lab2.methods;
 
-import ru.itmo.primath.lab2.util.Interval;
+import ru.itmo.primath.lab2.util.Coordinates;
+import ru.itmo.primath.lab2.util.Pair;
 import ru.itmo.primath.lab2.util.TemporaryFuncAndGradStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Method {
-    private final double[] points;
-    private final double step;
-    private final int iterations;
-    private final double eps;
-    private final TemporaryFuncAndGradStorage funcAndGradStorage = new TemporaryFuncAndGradStorage();
+    protected final Pair<Double> points;
+    protected final double eps;
+    protected final TemporaryFuncAndGradStorage funcAndGradStorage = new TemporaryFuncAndGradStorage();
+    protected double step;
 
-    public Method(double[] startingPoints, double step, int iterations, double eps) {
-        points = startingPoints;
+    public Method(Pair<Double> startingCoords, double step, double eps) {
+        points = startingCoords;
         this.step = step;
-        this.iterations = iterations;
         this.eps = eps;
     }
 
-    public List<Interval> minimizeAllFunc() {
-        List<Interval> result = new ArrayList<>();
+    public List<Coordinates> minimizeAllFunc() {
+        List<Coordinates> result = new ArrayList<>();
         for (int i = 0; i < funcAndGradStorage.getNumberOfFunctions(); i++) {
             funcAndGradStorage.setOperatedFuncNumber(i);
             result.add(minimizeFunc(i));
@@ -29,5 +28,5 @@ public abstract class Method {
         return result;
     }
 
-    public abstract Interval minimizeFunc(int funcNumber);
+    public abstract Coordinates minimizeFunc(int funcNumber);
 }
