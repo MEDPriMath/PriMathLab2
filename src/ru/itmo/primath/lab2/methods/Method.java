@@ -24,10 +24,10 @@ public abstract class Method {
         List<Interval> result = new ArrayList<>();
         for (int i = 0; i < funcAndGradStorage.getNumberOfFunctions(); i++) {
             funcAndGradStorage.setOperatedFuncNumber(i);
-            result.add(calculateFunc(i));
+            result.add(minimizeFunc(i));
         }
         return result;
     }
 
-    public abstract Interval calculateFunc(int funcNumber);
+    public abstract Interval minimizeFunc(int funcNumber);
 }
