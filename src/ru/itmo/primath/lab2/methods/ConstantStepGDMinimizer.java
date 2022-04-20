@@ -8,10 +8,6 @@ public class ConstantStepGDMinimizer implements GDMinimizer {
 
     private double step;
 
-    public ConstantStepGDMinimizer(double step) {
-        this.step = step;
-    }
-
     public void setStep(double step) {
         if (step < 0) {
             throw new IllegalArgumentException(String.format("Step cannot be below zero, value got: %f", step));
