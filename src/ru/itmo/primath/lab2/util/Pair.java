@@ -12,6 +12,14 @@ public class Pair<T> {
     }
 
     @Override
+    public String toString() {
+        return "Pair{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

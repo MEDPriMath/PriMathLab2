@@ -32,7 +32,7 @@ public class Coordinates {
         return new ArrayList<>(coordsList);
     }
 
-    public int getIterations() {
+    public int getIterationsNumber() {
         return iterations;
     }
 
