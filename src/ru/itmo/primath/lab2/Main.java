@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         var constStepMinimizer = new ConstantStepGDMinimizer();
-        Path path = constStepMinimizer.minimize(squareFunction1, new Vector2(20d, 20d), 1E-7, 5);
+        Path path = constStepMinimizer.minimize(squareFunction1, new Vector2(20d, 20d), 1E-7, 0.1);
         System.out.println(path.last());
         System.out.println("Iterations: " + path.length());
 

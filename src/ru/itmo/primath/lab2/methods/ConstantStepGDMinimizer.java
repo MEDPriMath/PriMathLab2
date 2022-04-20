@@ -6,17 +6,8 @@ import ru.itmo.primath.lab2.util.Path;
 
 public class ConstantStepGDMinimizer implements GDMinimizer {
 
-    private double step;
-
-    public void setStep(double step) {
-        if (step < 0) {
-            throw new IllegalArgumentException(String.format("Step cannot be below zero, value got: %f", step));
-        }
-        this.step = step;
-    }
-
     @Override
-    public Path minimize(Function2 func, Vector2 startPoint, double epsilon, double startStep) {
+    public Path minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
         Path path = new Path();
         path.addPoint(startPoint);
 

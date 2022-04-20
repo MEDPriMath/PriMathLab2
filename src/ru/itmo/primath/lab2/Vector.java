@@ -71,7 +71,7 @@ public abstract class Vector<T extends Vector<?>> {
         StringBuilder sb = new StringBuilder();
         sb.append('(').append(coords[0]);
         for (int i = 1; i < coords.length; i++) {
-            sb.append(", ").append(String.format("%f", coords[i]));
+            sb.append(", ").append(coords[i]);
         }
         sb.append(')');
         return sb.toString();
