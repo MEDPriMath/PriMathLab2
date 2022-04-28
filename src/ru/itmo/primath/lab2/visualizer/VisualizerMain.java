@@ -13,7 +13,15 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -21,6 +29,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetKey;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
@@ -53,9 +62,14 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class VisualizerMain {
+    private final Camera camera = new Camera(1, 0, 3f, 0, 0);
     private long window;
     private double windowWidth;
     private double windowHeight;
+
+    public static void main(String[] args) {
+        new VisualizerMain().run(1280, 720);
+    }
 
     public void run(int initialWidth, int initialHeight) {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -78,7 +92,7 @@ public class VisualizerMain {
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
-        if ( !glfwInit() )
+        if (!glfwInit())
             throw new IllegalStateException("Unable to initialize GLFW");
 
         // Configure GLFW
@@ -88,18 +102,29 @@ public class VisualizerMain {
 
         // Create the window
         window = glfwCreateWindow(initialWidth, initialHeight, "Hello World!", NULL, NULL);
-        if ( window == NULL )
+        if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+            if (action == GLFW_RELEASE) {
+                switch (key) {
+                    case GLFW_KEY_ESCAPE:
+                        glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+                        break;
+                    case GLFW_KEY_W:
+                        camera.move(Direction.FORWARD, 1);
+                        break;
+                }
+            }
+//            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+//                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
         });
 
         glfwSetWindowRefreshCallback(window, new GLFWWindowRefreshCallback() {
             final int[] width = new int[1];
             final int[] height = new int[1];
+
             @Override
             public void invoke(long window) {
                 glfwGetWindowSize(window, width, height);
@@ -122,7 +147,7 @@ public class VisualizerMain {
         });
 
         // Get the thread stack and push a new frame
-        try ( MemoryStack stack = stackPush() ) {
+        try (MemoryStack stack = stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1); // int*
             IntBuffer pHeight = stack.mallocInt(1); // int*
 
@@ -162,7 +187,8 @@ public class VisualizerMain {
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
-        while ( !glfwWindowShouldClose(window) ) {
+        while (!glfwWindowShouldClose(window)) {
+            checkKeys();
             render();
 
             glfwSwapBuffers(window); // swap the color buffers
@@ -170,6 +196,31 @@ public class VisualizerMain {
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
+        }
+    }
+
+    private void checkKeys() {
+        double speed = 0.3716666 / 2;
+        if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+            speed *= 2;
+        }
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            camera.move(Direction.FORWARD, speed);
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            camera.move(Direction.BACKWARD, speed);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            camera.move(Direction.LEFT, speed);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            camera.move(Direction.RIGHT, speed);
+        }
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+            camera.move(Direction.UP, speed);
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+            camera.move(Direction.DOWN, speed);
         }
     }
 
@@ -185,13 +236,10 @@ public class VisualizerMain {
     }
 
     private void onMouseMove(double dx, double dy) {
-        System.out.println(dx + " " + dy);
         float speedX = 0.2f;
         float speedY = 0.2f;
         camera.rotate(-dx * speedX, -dy * speedY);
     }
-
-    private final Camera camera = new Camera(1, 0, 3f, 0, 0);
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
@@ -216,9 +264,5 @@ public class VisualizerMain {
             GL11.glEnd();
         }
         glPopMatrix();
-    }
-
-    public static void main(String[] args) {
-        new VisualizerMain().run(1280, 720);
     }
 }

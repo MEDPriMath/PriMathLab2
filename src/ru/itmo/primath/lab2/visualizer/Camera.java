@@ -22,11 +22,38 @@ public class Camera {
 
     public void rotate(double yaw, double pitch) {
         this.yaw += yaw;
-        if (yaw < -180) yaw += 360;
-        if (yaw > 180) yaw -= 360;
+        if (this.yaw < -180) this.yaw += 360;
+        if (this.yaw > 180) this.yaw -= 360;
         this.pitch += pitch;
-        if (pitch < -90) pitch = -90;
-        if (pitch > 90) pitch = 90;
-//        System.out.printf("Rotation: %f %f\n", yaw, pitch);
+        if (this.pitch < -90) this.pitch = -90;
+        if (this.pitch > 90) this.pitch = 90;
+    }
+
+    void move(Direction direction, double speed) {
+        double rads = yaw / 180 * Math.PI;
+        switch (direction) {
+            case FORWARD:
+                z -= speed * Math.cos(rads);
+                x -= speed * Math.sin(rads);
+                break;
+            case BACKWARD:
+                z += speed * Math.cos(rads);
+                x += speed * Math.sin(rads);
+                break;
+            case LEFT:
+                x -= speed * Math.cos(rads);
+                z += speed * Math.sin(rads);
+                break;
+            case RIGHT:
+                x += speed * Math.cos(rads);
+                z -= speed * Math.sin(rads);
+                break;
+            case UP:
+                y += speed;
+                break;
+            case DOWN:
+                y -= speed;
+                break;
+        }
     }
 }
