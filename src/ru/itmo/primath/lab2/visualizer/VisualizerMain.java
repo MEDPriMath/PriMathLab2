@@ -55,12 +55,16 @@ import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_INT;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW_MATRIX;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrustum;
 import static org.lwjgl.opengl.GL11.glGetFloatv;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
@@ -68,6 +72,7 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
@@ -84,6 +89,11 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class VisualizerMain {
     private final Camera camera = new Camera(0, 0.5f, 3f, 0, 0);
+    int obj;
+    Shader shader;
+    float[] projection = new float[16];
+    int projectionPosition;
+    int indices;
     private long window;
     private double windowWidth;
     private double windowHeight;
@@ -237,11 +247,6 @@ public class VisualizerMain {
         camera.rotate(-dx * speedX, -dy * speedY);
     }
 
-    int obj;
-    Shader shader;
-    float[] projection = new float[16];
-    int projectionPosition;
-
     private String readResourceFile(String name) {
         InputStream is = getClass().getClassLoader().getResourceAsStream(name);
         if (is == null) {
@@ -285,11 +290,25 @@ public class VisualizerMain {
 
         int points = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, points);
-        glBufferData(GL_ARRAY_BUFFER, new float[]{0,1,0, 1,1,0, 1,0,0}, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, new float[]{
+                0, 1, 0,
+                1, 1, 0,
+                1, 0, 0,
+                0, 0, 1}, GL_STATIC_DRAW);
 
         int colors = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colors);
-        glBufferData(GL_ARRAY_BUFFER, new float[]{1,0,0, 0,1,0, 0,0,1}, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, new float[]{
+                1, 0, 0,
+                0, 1, 0,
+                0, 0, 1,
+                1, 1, 1}, GL_STATIC_DRAW);
+
+        indices = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, new int[]{
+                0, 1, 2,
+                1, 2, 3}, GL_STATIC_DRAW);
 
         obj = glGenVertexArrays();
         glBindVertexArray(obj);
@@ -312,20 +331,21 @@ public class VisualizerMain {
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-//        System.out.println(camera.x + " " + camera.y + " " + camera.z);
 
         glPushMatrix();
+        glEnable(GL_DEPTH_TEST);
         {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             camera.apply();
+            glGetFloatv(GL_MODELVIEW_MATRIX, projection);
+            glUniformMatrix4fv(projectionPosition, false, projection);
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
-            {
-                glGetFloatv(GL_MODELVIEW_MATRIX, projection);
-                glUniformMatrix4fv(projectionPosition, false, projection);
-                glBindVertexArray(obj);
-                glDrawArrays(GL_TRIANGLES, 0, 3);
-            }
+
+            glBindVertexArray(obj);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
+            glDrawElements(GL_TRIANGLES, 6, GL_INT, 0);
+
             GL11.glBegin(GL_TRIANGLES);
             {
                 // x axis
@@ -387,6 +407,7 @@ public class VisualizerMain {
             }
             GL11.glEnd();
         }
+        glDisable(GL_DEPTH_TEST);
         glPopMatrix();
     }
 }
