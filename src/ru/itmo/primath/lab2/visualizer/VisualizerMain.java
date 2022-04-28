@@ -3,7 +3,9 @@ package ru.itmo.primath.lab2.visualizer;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowRefreshCallback;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
@@ -27,6 +29,7 @@ import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowRefreshCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
@@ -38,6 +41,13 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glFrustum;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -82,6 +92,16 @@ public class VisualizerMain {
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+        });
+
+        glfwSetWindowRefreshCallback(window, new GLFWWindowRefreshCallback() {
+            final int[] width = new int[1];
+            final int[] height = new int[1];
+            @Override
+            public void invoke(long window) {
+                glfwGetWindowSize(window, width, height);
+                resizeWindow(width[0], height[0]);
+            }
         });
 
         // Get the thread stack and push a new frame
@@ -136,8 +156,57 @@ public class VisualizerMain {
         }
     }
 
+    private void resizeWindow(int width, int height) {
+        float ratio = (float) width / height;
+        double k = 0.1;
+        glViewport(0, 0, width, height);
+        glLoadIdentity();
+        glFrustum(-ratio * k, ratio * k, -k, k, k * 2, 100);
+    }
+
+    private class Camera {
+        float x, y, z, yaw, pitch;
+
+        public Camera(float x, float y, float z, float yaw, float pitch) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.yaw = yaw;
+            this.pitch = pitch;
+        }
+    }
+
+    private Camera camera = new Camera(0,1.7f,3f,0,0);
+
+    private void applyCamera() {
+        glRotatef(-camera.pitch,1,0,0);
+        glRotatef(-camera.yaw,0,1,0);
+        glTranslatef(-camera.x, -camera.y, -camera.z);
+    }
+
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+
+        glPushMatrix();
+        {
+            applyCamera();
+            GL11.glBegin(GL11.GL_TRIANGLES);
+            {
+                // Top & Red
+                GL11.glColor3f(1.0f, 0.0f, 0.0f);
+                GL11.glVertex2f(0.0f, 1.0f);
+
+                // Right & Green
+                GL11.glColor3f(0.0f, 1.0f, 0.0f);
+                GL11.glVertex2f(1.0f, 1.0f);
+
+                // Left & Blue
+                GL11.glColor3f(0.0f, 0.0f, 1.0f);
+                GL11.glVertex2f(1.0f, -1.0f);
+            }
+            GL11.glEnd();
+        }
+        glPopMatrix();
     }
 
     public static void main(String[] args) {
