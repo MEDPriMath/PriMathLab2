@@ -112,9 +112,9 @@ public class VisualizerMain {
                     case GLFW_KEY_ESCAPE:
                         glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
                         break;
-                    case GLFW_KEY_W:
-                        camera.move(Direction.FORWARD, 1);
-                        break;
+//                    case GLFW_KEY_W:
+//                        camera.move(Direction.FORWARD, 1);
+//                        break;
                 }
             }
 //            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
@@ -200,7 +200,7 @@ public class VisualizerMain {
     }
 
     private void checkKeys() {
-        double speed = 0.3716666 / 2;
+        double speed = 0.3716666 / 5;
         if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
             speed *= 2;
         }
@@ -243,6 +243,7 @@ public class VisualizerMain {
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+        System.out.println(camera.x + " " + camera.y + " " + camera.z);
 
         glPushMatrix();
         {
