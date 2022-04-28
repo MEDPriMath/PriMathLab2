@@ -56,14 +56,11 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_INT;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW_MATRIX;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrustum;
 import static org.lwjgl.opengl.GL11.glGetFloatv;
@@ -71,25 +68,16 @@ import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class VisualizerMain {
     private final Camera camera = new Camera(0, 0.5f, 3f, 0, 0);
-    int obj;
+    Entity obj;
     Shader shader;
     float[] projection = new float[16];
     int projectionPosition;
@@ -288,34 +276,21 @@ public class VisualizerMain {
         projectionPosition = glGetUniformLocation(shader.program, "projection");
         glUseProgram(shader.program);
 
-        int points = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, points);
-        glBufferData(GL_ARRAY_BUFFER, new float[]{
-                0, 1, 0,
-                1, 1, 0,
-                1, 0, 0,
-                0, 0, 1}, GL_STATIC_DRAW);
-
-        int colors = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colors);
-        glBufferData(GL_ARRAY_BUFFER, new float[]{
-                1, 0, 0,
-                0, 1, 0,
-                0, 0, 1,
-                1, 1, 1}, GL_STATIC_DRAW);
-
-        indices = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, new int[]{
-                0, 1, 2,
-                1, 2, 3}, GL_STATIC_DRAW);
-
-        obj = glGenVertexArrays();
-        glBindVertexArray(obj);
-        glBindBuffer(GL_ARRAY_BUFFER, points);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, NULL);
-        glBindBuffer(GL_ARRAY_BUFFER, colors);
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, NULL);
+        obj = new Entity(
+                new float[]{
+                        0, 1, 0,
+                        1, 1, 0,
+                        1, 0, 0,
+                        0, 0, 1},
+                new float[]{
+                        1, 0, 0,
+                        0, 1, 0,
+                        0, 0, 1,
+                        1, 1, 1},
+                new int[]{
+                        0, 1, 2,
+                        1, 2, 3}
+        );
 
         while (!glfwWindowShouldClose(window)) {
             checkKeys();
@@ -342,9 +317,7 @@ public class VisualizerMain {
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
-            glBindVertexArray(obj);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
-            glDrawElements(GL_TRIANGLES, 6, GL_INT, 0);
+            obj.render();
 
             GL11.glBegin(GL_TRIANGLES);
             {
