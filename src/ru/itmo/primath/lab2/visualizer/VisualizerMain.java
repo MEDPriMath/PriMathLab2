@@ -1,6 +1,7 @@
 package ru.itmo.primath.lab2.visualizer;
 
 import org.lwjgl.Version;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowRefreshCallback;
@@ -26,6 +27,8 @@ import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
@@ -45,19 +48,19 @@ import static org.lwjgl.opengl.GL11.glFrustum;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glRotatef;
-import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class VisualizerMain {
     private long window;
+    private double windowWidth;
+    private double windowHeight;
 
-    public void run(int windowWidth, int windowHeight) {
+    public void run(int initialWidth, int initialHeight) {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 
-        init(windowWidth, windowHeight);
+        init(initialWidth, initialHeight);
         startLoop();
 
         // Free the window callbacks and destroy the window
@@ -69,7 +72,7 @@ public class VisualizerMain {
         glfwSetErrorCallback(null).free();
     }
 
-    private void init(int windowWidth, int windowHeight) {
+    private void init(int initialWidth, int initialHeight) {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -84,7 +87,7 @@ public class VisualizerMain {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(windowWidth, windowHeight, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(initialWidth, initialHeight, "Hello World!", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -101,6 +104,20 @@ public class VisualizerMain {
             public void invoke(long window) {
                 glfwGetWindowSize(window, width, height);
                 resizeWindow(width[0], height[0]);
+            }
+        });
+
+        glfwSetCursorPosCallback(window, new GLFWCursorPosCallback() {
+            @Override
+            public void invoke(long window, double xpos, double ypos) {
+                double dx = xpos - windowWidth / 2;
+                double dy = ypos - windowHeight / 2;
+
+                if (dx != 0 || dy != 0) {
+                    onMouseMove(dx, dy);
+                    glfwSetCursorPos(window, windowWidth / 2, windowHeight / 2);
+                }
+//                System.out.println(xpos + " " + ypos);
             }
         });
 
@@ -157,6 +174,9 @@ public class VisualizerMain {
     }
 
     private void resizeWindow(int width, int height) {
+        windowWidth = width;
+        windowHeight = height;
+
         float ratio = (float) width / height;
         double k = 0.1;
         glViewport(0, 0, width, height);
@@ -164,32 +184,21 @@ public class VisualizerMain {
         glFrustum(-ratio * k, ratio * k, -k, k, k * 2, 100);
     }
 
-    private class Camera {
-        float x, y, z, yaw, pitch;
-
-        public Camera(float x, float y, float z, float yaw, float pitch) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.yaw = yaw;
-            this.pitch = pitch;
-        }
+    private void onMouseMove(double dx, double dy) {
+        System.out.println(dx + " " + dy);
+        float speedX = 1;
+        float speedY = 1;
+        camera.rotate(dx * speedX, -dy * speedY);
     }
 
-    private Camera camera = new Camera(0,1.7f,3f,0,0);
-
-    private void applyCamera() {
-        glRotatef(-camera.pitch,1,0,0);
-        glRotatef(-camera.yaw,0,1,0);
-        glTranslatef(-camera.x, -camera.y, -camera.z);
-    }
+    private final Camera camera = new Camera(1, 0, 3f, 0, 0);
 
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
         glPushMatrix();
         {
-            applyCamera();
+            camera.apply();
             GL11.glBegin(GL11.GL_TRIANGLES);
             {
                 // Top & Red
@@ -202,7 +211,7 @@ public class VisualizerMain {
 
                 // Left & Blue
                 GL11.glColor3f(0.0f, 0.0f, 1.0f);
-                GL11.glVertex2f(1.0f, -1.0f);
+                GL11.glVertex2f(1.0f, 0.0f);
             }
             GL11.glEnd();
         }
