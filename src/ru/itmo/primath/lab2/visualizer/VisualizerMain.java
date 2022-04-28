@@ -186,9 +186,9 @@ public class VisualizerMain {
 
     private void onMouseMove(double dx, double dy) {
         System.out.println(dx + " " + dy);
-        float speedX = 1;
-        float speedY = 1;
-        camera.rotate(dx * speedX, -dy * speedY);
+        float speedX = 0.2f;
+        float speedY = 0.2f;
+        camera.rotate(-dx * speedX, -dy * speedY);
     }
 
     private final Camera camera = new Camera(1, 0, 3f, 0, 0);
