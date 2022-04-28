@@ -6,7 +6,7 @@ import ru.itmo.primath.lab2.Vector2;
 import ru.itmo.primath.lab2.util.Path;
 
 public class SplitStepGDMinimizer implements GDMinimizer {
-    private final double split = 0.5;
+    private final double split = 0.95;
 
     @Override
     public Path minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
