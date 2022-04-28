@@ -81,7 +81,6 @@ public class VisualizerMain {
     Shader shader;
     float[] projection = new float[16];
     int projectionPosition;
-    int indices;
     private long window;
     private double windowWidth;
     private double windowHeight;
