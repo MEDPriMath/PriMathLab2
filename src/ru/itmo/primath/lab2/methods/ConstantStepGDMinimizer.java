@@ -1,8 +1,11 @@
 package ru.itmo.primath.lab2.methods;
 
 import ru.itmo.primath.lab2.Function2;
+import ru.itmo.primath.lab2.Vector;
 import ru.itmo.primath.lab2.Vector2;
 import ru.itmo.primath.lab2.util.Path;
+
+import java.util.function.Function;
 
 public class ConstantStepGDMinimizer implements GDMinimizer {
 
@@ -22,10 +25,12 @@ public class ConstantStepGDMinimizer implements GDMinimizer {
 
         while (diff > epsilon) {
             double currValue = func.value(currPoint);
-            Vector2 currGrad = func.grad(currPoint);
-            if (currValue > prevValue) {
+            while (currValue > prevValue) {
                 step = step / 2;
+                currPoint = prevPoint.decrease(prevGrad.multiply(step));
+                currValue = func.value(currPoint);
             }
+            Vector2 currGrad = func.grad(currPoint);
             prevPoint = currPoint;
             currPoint = prevPoint.decrease(prevGrad.multiply(step));
             path.addPoint(currPoint);
