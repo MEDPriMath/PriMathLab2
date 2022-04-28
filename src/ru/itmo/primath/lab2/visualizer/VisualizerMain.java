@@ -8,6 +8,9 @@ import org.lwjgl.glfw.GLFWWindowRefreshCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
+import ru.itmo.primath.lab2.Function2;
+import ru.itmo.primath.lab2.Vector2;
+import ru.itmo.primath.lab2.util.TemporaryFunctionStorage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -275,21 +278,24 @@ public class VisualizerMain {
         projectionPosition = glGetUniformLocation(shader.program, "projection");
         glUseProgram(shader.program);
 
-        obj = new Entity(
-                new float[]{
-                        0, 1, 0,
-                        1, 1, 0,
-                        1, 0, 0,
-                        0, 0, 1},
-                new float[]{
-                        1, 0, 0,
-                        0, 1, 0,
-                        0, 0, 1,
-                        1, 1, 1},
-                new int[]{
-                        0, 1, 2,
-                        1, 2, 3}
-        );
+//        obj = new Entity(
+//                new float[]{
+//                        0, 1, 0,
+//                        1, 1, 0,
+//                        1, 0, 0,
+//                        0, 0, 1},
+//                new float[]{
+//                        1, 0, 0,
+//                        0, 1, 0,
+//                        0, 0, 1,
+//                        1, 1, 1},
+//                new int[]{
+//                        0, 1, 2,
+//                        1, 2, 3}
+//        );
+
+        Chunk chunk = new Chunk(TemporaryFunctionStorage.squareFunction1, 0, 0, 1, 25);
+        obj = chunk.getEntity();
 
         while (!glfwWindowShouldClose(window)) {
             checkKeys();
