@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowRefreshCallback;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.ByteArrayOutputStream;
@@ -82,7 +83,7 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class VisualizerMain {
-    private final Camera camera = new Camera(1, 0, 3f, 0, 0);
+    private final Camera camera = new Camera(0, 0.5f, 3f, 0, 0);
     private long window;
     private double windowWidth;
     private double windowHeight;
@@ -231,8 +232,8 @@ public class VisualizerMain {
     }
 
     private void onMouseMove(double dx, double dy) {
-        float speedX = 0.2f;
-        float speedY = 0.2f;
+        float speedX = 0.15f;
+        float speedY = 0.15f;
         camera.rotate(-dx * speedX, -dy * speedY);
     }
 
@@ -325,6 +326,66 @@ public class VisualizerMain {
                 glBindVertexArray(obj);
                 glDrawArrays(GL_TRIANGLES, 0, 3);
             }
+            GL11.glBegin(GL_TRIANGLES);
+            {
+                // x axis
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.0f, 0.0f, -0.01f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(10.0f, 0.0f, -0.01f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.0f, 0.0f, 0.01f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(10.0f, 0.0f, 0.01f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(10.0f, 0.0f, -0.01f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.0f, 0.0f, 0.01f);
+
+                // z axis
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.01f, 0.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.01f, 0.0f, 10.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(-0.01f, 0.0f, 10.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.01f, 0.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(-0.01f, 0.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(-0.01f, 0.0f, 10.0f);
+
+                // y axis
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.01f, 0.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.01f, 10.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(-0.01f, 10.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(0.01f, 0.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(-0.01f, 0.0f, 0.0f);
+
+                GL11.glColor3f(0.0f, 0.0f, 0.0f);
+                GL11.glVertex3f(-0.01f, 10.0f, 0.0f);
+            }
+            GL11.glEnd();
         }
         glPopMatrix();
     }
