@@ -1,7 +1,7 @@
 package ru.itmo.primath.lab2;
 
 import static java.lang.Math.sqrt;
-import static ru.itmo.primath.lab2.util.MathUtils.sqr;
+import static ru.itmo.primath.lab2.util.MathUtils.Sqr;
 
 public abstract class Vector<T extends Vector<?>> {
 
@@ -59,7 +59,7 @@ public abstract class Vector<T extends Vector<?>> {
         }
         double sum = 0;
         for (int i = 0; i < coords.length; i++) {
-            sum += sqr(coords[i] - other.coords[i]);
+            sum += Sqr(coords[i] - other.coords[i]);
         }
         return sqrt(sum);
     }

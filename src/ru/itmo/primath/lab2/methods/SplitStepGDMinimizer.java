@@ -3,6 +3,7 @@ package ru.itmo.primath.lab2.methods;
 import ru.itmo.primath.lab2.Function2;
 import ru.itmo.primath.lab2.Vector;
 import ru.itmo.primath.lab2.Vector2;
+import ru.itmo.primath.lab2.util.MathUtils;
 import ru.itmo.primath.lab2.util.Path;
 
 public class SplitStepGDMinimizer implements GDMinimizer {
@@ -25,18 +26,20 @@ public class SplitStepGDMinimizer implements GDMinimizer {
 
         while (diff > epsilon) {
             //todo проверить правильность условия Армихо
-            if (prevValue - currValue >= split * step * diff) {
+
+            // Fxk - Fxk+1 > какая-нибудь константа * шаг * квадрат длины градиента
+            if (prevValue - currValue > Math.pow(10, -3) * step * Math.pow(MathUtils.CalcVectorLength(prevGrad), 2)) {
                 path.addPoint(currPoint);
                 prevPoint = currPoint;
                 prevGrad = currGrad;
                 prevValue = currValue;
+                currPoint = prevPoint.decrease(prevGrad.multiply(step));
+                currValue = func.value(currPoint);
+                currGrad = func.grad(currPoint);
+                diff = currPoint.distance(prevPoint);
             } else {
                 step = split * step;
             }
-            currPoint = prevPoint.decrease(prevGrad.multiply(step));
-            currValue = func.value(currPoint);
-            currGrad = func.grad(currPoint);
-            diff = currPoint.distance(prevPoint);
         }
 
         return path;
