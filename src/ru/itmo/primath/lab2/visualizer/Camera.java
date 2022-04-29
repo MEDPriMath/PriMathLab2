@@ -1,10 +1,12 @@
 package ru.itmo.primath.lab2.visualizer;
 
+import static java.lang.Math.exp;
 import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Camera {
-    float x, y, z, yaw, pitch;
+    float x, y, z, yaw, pitch, scale;
+    double scaleFactor = exp(scale);
 
     public Camera() {
         this(0, 0, 0, 0, 0);
@@ -24,6 +26,8 @@ public class Camera {
         z = 0;
         yaw = 0;
         pitch = 0;
+        scale = 0;
+        scaleFactor = exp(scale);
     }
 
     public void apply() {
@@ -43,6 +47,7 @@ public class Camera {
 
     public void move(Direction direction, double speed) {
         double rads = yaw / 180 * Math.PI;
+        speed /= scaleFactor;
         switch (direction) {
             case FORWARD -> {
                 z -= speed * Math.cos(rads);
@@ -63,5 +68,10 @@ public class Camera {
             case UP -> y += speed;
             case DOWN -> y -= speed;
         }
+    }
+
+    public void scale(double dScale) {
+        scale += dScale;
+        scaleFactor = exp(scale);
     }
 }

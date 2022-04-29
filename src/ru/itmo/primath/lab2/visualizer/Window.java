@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 import ru.itmo.primath.lab2.visualizer.callbacks.CustomGLFWCursorPosCallback;
 import ru.itmo.primath.lab2.visualizer.callbacks.CustomGLFWKeyCallback;
+import ru.itmo.primath.lab2.visualizer.callbacks.CustomGLFWScrollCallback;
 import ru.itmo.primath.lab2.visualizer.callbacks.CustomGLFWWindowRefreshCallback;
 import ru.itmo.primath.lab2.visualizer.services.InputService;
 
@@ -23,6 +24,7 @@ import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowRefreshCallback;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
@@ -54,6 +56,7 @@ public class Window {
         glfwSetKeyCallback(windowHandle, new CustomGLFWKeyCallback(inputService));
         glfwSetWindowRefreshCallback(windowHandle, new CustomGLFWWindowRefreshCallback(inputService));
         glfwSetCursorPosCallback(windowHandle, new CustomGLFWCursorPosCallback(inputService));
+        glfwSetScrollCallback(windowHandle, new CustomGLFWScrollCallback(inputService));
 
         // Get the thread stack and push a new frame
         try (MemoryStack stack = stackPush()) {

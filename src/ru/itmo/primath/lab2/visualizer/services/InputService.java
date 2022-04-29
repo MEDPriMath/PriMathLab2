@@ -81,4 +81,9 @@ public class InputService {
             camera.move(Direction.DOWN, speed);
         }
     }
+
+    public void onMouseScroll(double xOffset, double yOffset) {
+        float scaleSensitivity = 0.1f;
+        camera.scale((xOffset + yOffset) * scaleSensitivity);
+    }
 }
