@@ -3,6 +3,8 @@ package ru.itmo.primath.lab2.visualizer;
 import ru.itmo.primath.lab2.Function2;
 import ru.itmo.primath.lab2.Vector2;
 import ru.itmo.primath.lab2.methods.ConstantStepGDMinimizer;
+import ru.itmo.primath.lab2.methods.GDMinimizer;
+import ru.itmo.primath.lab2.methods.GoldenRatioGDMinimizer;
 import ru.itmo.primath.lab2.methods.SplitStepGDMinimizer;
 import ru.itmo.primath.lab2.util.Path;
 import ru.itmo.primath.lab2.visualizer.graphics.Camera;
@@ -91,7 +93,7 @@ public class Engine {
             activePath = null;
         }
         var f = meshFunctions.get(meshes.indexOf(activeMesh));
-        ConstantStepGDMinimizer minimizer = new ConstantStepGDMinimizer();
+        GDMinimizer minimizer = new ConstantStepGDMinimizer();
         Path<Vector2> path = minimizer.minimize(f,
                 new Vector2(camera.getX(), camera.getZ()), 1E-6, 1);
         activePath = Renderable.pathLine(path, f);
