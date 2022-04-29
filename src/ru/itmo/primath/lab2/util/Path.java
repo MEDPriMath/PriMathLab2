@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Path {
-    private final List<Vector<?>> path = new ArrayList<>();
+public class Path<T extends Vector<T>> {
+    private final List<T> path = new ArrayList<>();
 
-    public void addPoint(Vector<?> v) {
+    public void addPoint(T v) {
         path.add(v);
     }
 
-    public List<Vector<?>> getPoints() {
+    public List<T> getPoints() {
         return new ArrayList<>(path);
     }
 

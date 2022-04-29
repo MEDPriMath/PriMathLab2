@@ -12,6 +12,12 @@ public interface Function2 {
 
     double value(double x, double y);
 
-    Vector2 grad(double x, double y);
+    default Vector2 grad(double x, double y) {
+        double epsilon = 1E-6;
+        double value = value(x, y);
+        double dx = value(x + epsilon, y) - value;
+        double dy = value(x, y + epsilon) - value;
+        return new Vector2(dx / epsilon, dy / epsilon);
+    }
 
 }
