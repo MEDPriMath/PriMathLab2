@@ -17,16 +17,18 @@ public class GoldenRatioGDMinimizer implements GDMinimizer {
         Vector2 prevPoint = startPoint;
         Vector2 prevGrad = func.grad(prevPoint);
 
-        step = GoldenRationMinimizer.CalcMinimize(-100, 100, prevPoint, prevGrad, func);
+        final int range = 100;
+
+        step = GoldenRationMinimizer.CalcMinimize(-range, range, prevPoint, prevGrad, func);
 
         Vector2 currPoint = prevPoint.decrease(prevGrad.multiply(step));
         path.addPoint(currPoint);
 
         double diff = currPoint.distance(prevPoint);
 
-        while (diff > epsilon) {
+        while (diff > epsilon && path.length() < 500) {
             Vector2 currGrad = func.grad(currPoint);
-            step = GoldenRationMinimizer.CalcMinimize(-100, 100, currPoint, currGrad, func);
+            step = GoldenRationMinimizer.CalcMinimize(-range, range, currPoint, currGrad, func);
             prevPoint = currPoint;
             currPoint = prevPoint.decrease(prevGrad.multiply(step));
             path.addPoint(currPoint);

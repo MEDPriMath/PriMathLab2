@@ -1,6 +1,11 @@
 package ru.itmo.primath.lab2.visualizer.services;
 
 import org.lwjgl.glfw.GLFW;
+import ru.itmo.primath.lab2.methods.ConstantStepGDMinimizer;
+import ru.itmo.primath.lab2.methods.FibonacciGDMinimizer;
+import ru.itmo.primath.lab2.methods.GDMinimizer;
+import ru.itmo.primath.lab2.methods.GoldenRatioGDMinimizer;
+import ru.itmo.primath.lab2.methods.SplitStepGDMinimizer;
 import ru.itmo.primath.lab2.visualizer.graphics.Camera;
 import ru.itmo.primath.lab2.visualizer.graphics.Direction;
 
@@ -9,12 +14,15 @@ import java.util.function.Consumer;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_I;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_O;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_P;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_U;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -27,9 +35,9 @@ import static org.lwjgl.opengl.GL11.glViewport;
 public class InputService {
     private final Camera camera;
     private final Consumer<Integer> chooseMesh;
-    private final Runnable activatePath;
+    private final Consumer<GDMinimizer> activatePath;
 
-    public InputService(Camera camera, Consumer<Integer> chooseMesh, Runnable activatePath) {
+    public InputService(Camera camera, Consumer<Integer> chooseMesh, Consumer<GDMinimizer> activatePath) {
         this.camera = camera;
         this.chooseMesh = chooseMesh;
         this.activatePath = activatePath;
@@ -48,7 +56,12 @@ public class InputService {
             } else switch (key) {
                 case GLFW_KEY_ESCAPE -> glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
                 case GLFW_KEY_R -> camera.reset();
-                case GLFW_KEY_P -> activatePath.run();
+                case GLFW_KEY_P -> activatePath.accept(new ConstantStepGDMinimizer());
+                case GLFW_KEY_O -> activatePath.accept(new SplitStepGDMinimizer());
+                case GLFW_KEY_I -> activatePath.accept(new GoldenRatioGDMinimizer());
+                case GLFW_KEY_U -> activatePath.accept(new FibonacciGDMinimizer());
+//                case GLFW_KEY_Y -> activatePath.accept(new ConstantStepGDMinimizer());
+//                case GLFW_KEY_T -> activatePath.accept(new ConstantStepGDMinimizer());
             }
         }
     }

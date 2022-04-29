@@ -2,10 +2,8 @@ package ru.itmo.primath.lab2.visualizer;
 
 import ru.itmo.primath.lab2.Function2;
 import ru.itmo.primath.lab2.Vector2;
-import ru.itmo.primath.lab2.methods.ConstantStepGDMinimizer;
 import ru.itmo.primath.lab2.methods.GDMinimizer;
-import ru.itmo.primath.lab2.methods.GoldenRatioGDMinimizer;
-import ru.itmo.primath.lab2.methods.SplitStepGDMinimizer;
+import ru.itmo.primath.lab2.methods.MyGDMinimizer;
 import ru.itmo.primath.lab2.util.Path;
 import ru.itmo.primath.lab2.visualizer.graphics.Camera;
 import ru.itmo.primath.lab2.visualizer.graphics.Renderer;
@@ -32,13 +30,16 @@ public class Engine {
     Mesh activeMesh;
     Renderable activePath;
 
+    MyGDMinimizer aminimizer;
+
     public void run(int windowWidth,
                     int windowHeight,
                     List<Function2> meshFunctions,
                     float meshX,
                     float meshY,
                     float meshSize,
-                    int meshResolution) {
+                    int meshResolution,
+                    MyGDMinimizer minimizer) {
         if (meshFunctions.size() == 0) {
             throw new IllegalArgumentException("At least one function is required");
         }
@@ -87,13 +88,13 @@ public class Engine {
         }
     }
 
-    private void activatePath() {
+    private void activatePath(GDMinimizer minimizer) {
         if (activePath != null) {
             activePath.dispose();
             activePath = null;
         }
         var f = meshFunctions.get(meshes.indexOf(activeMesh));
-        GDMinimizer minimizer = new ConstantStepGDMinimizer();
+//        GDMinimizer minimizer = new ConstantStepGDMinimizer();
         Path<Vector2> path = minimizer.minimize(f,
                 new Vector2(camera.getX(), camera.getZ()), 1E-6, 1);
         activePath = Renderable.pathLine(path, f);
