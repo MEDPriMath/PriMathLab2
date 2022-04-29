@@ -18,6 +18,14 @@ public class Camera {
         this.pitch = pitch;
     }
 
+    public void reset() {
+        x = 0;
+        y = 0;
+        z = 0;
+        yaw = 0;
+        pitch = 0;
+    }
+
     public void apply() {
         glRotatef(-pitch, 1, 0, 0);
         glRotatef(-yaw, 0, 1, 0);
