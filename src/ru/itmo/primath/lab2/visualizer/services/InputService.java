@@ -1,7 +1,10 @@
 package ru.itmo.primath.lab2.visualizer.services;
 
+import org.lwjgl.glfw.GLFW;
 import ru.itmo.primath.lab2.visualizer.Camera;
 import ru.itmo.primath.lab2.visualizer.Direction;
+
+import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
@@ -22,9 +25,11 @@ import static org.lwjgl.opengl.GL11.glViewport;
 
 public class InputService {
     private final Camera camera;
+    private final Consumer<Integer> chooseMesh;
 
-    public InputService(Camera camera) {
+    public InputService(Camera camera, Consumer<Integer> chooseMesh) {
         this.camera = camera;
+        this.chooseMesh = chooseMesh;
     }
 
     public void onMouseMove(double dx, double dy) {
@@ -35,7 +40,9 @@ public class InputService {
 
     public void onKeyEvent(long window, int key, int scancode, int action, int mods) {
         if (action == GLFW_RELEASE) {
-            switch (key) {
+            if (GLFW.GLFW_KEY_1 <= key && key <= GLFW.GLFW_KEY_9) {
+                chooseMesh.accept(key - GLFW.GLFW_KEY_1);
+            } else switch (key) {
                 case GLFW_KEY_ESCAPE -> glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
                 case GLFW_KEY_R -> camera.reset();
             }
@@ -73,9 +80,5 @@ public class InputService {
         if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
             camera.move(Direction.DOWN, speed);
         }
-    }
-
-    public void activateFunction() {
-
     }
 }

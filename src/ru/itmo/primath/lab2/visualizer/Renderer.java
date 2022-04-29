@@ -3,8 +3,6 @@ package ru.itmo.primath.lab2.visualizer;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Collection;
-
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
@@ -24,9 +22,9 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 import static ru.itmo.primath.lab2.util.IOUtils.readResourceFile;
 
 public class Renderer {
-    Shader mainShader;
+    Shader mainShader, meshShader;
 
-    int projectionPosition, minPosition, maxPosition;
+    int projectionMainPosition, projectionMeshPosition;
     float[] projection = new float[16];
 
     private final Camera camera;
@@ -38,32 +36,30 @@ public class Renderer {
         mainShader = new Shader(
                 readResourceFile("shaders/vertex.glsl"),
                 readResourceFile("shaders/fragment.glsl"));
+        meshShader = new Shader(
+                readResourceFile("shaders/mesh_vertex.glsl"),
+                readResourceFile("shaders/mesh_white_cell.glsl"));
 
-        projectionPosition = glGetUniformLocation(mainShader.program, "projection");
-//        minPosition = glGetUniformLocation(mainShader.program, "min");
-//        maxPosition = glGetUniformLocation(mainShader.program, "max");
+        projectionMainPosition = glGetUniformLocation(mainShader.program, "projection");
+        projectionMeshPosition = glGetUniformLocation(meshShader.program, "projection");
 
         glClearColor(0.2f, 0.5f, 1, 0.0f);
     }
 
-    public void render(Collection<Entity> entities) {
+    public void render(Mesh activeMesh) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glPushMatrix();
         glEnable(GL_DEPTH_TEST);
         camera.apply();
         {
-            glGetFloatv(GL_MODELVIEW_MATRIX, projection);
+            glUseProgram(meshShader.program);
 
-            glUniformMatrix4fv(projectionPosition, false, projection);
-//            glUniform1f(minPosition, minY);
-//            glUniform1f(maxPosition, maxY);
+            glGetFloatv(GL_MODELVIEW_MATRIX, projection);
+            glUniformMatrix4fv(projectionMeshPosition, false, projection);
 
             glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-
-            glUseProgram(mainShader.program);
-            entities.forEach(Entity::render);
+            activeMesh.render();
 
             renderAxes();
         }

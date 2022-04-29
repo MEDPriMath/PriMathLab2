@@ -2,8 +2,7 @@ package ru.itmo.primath.lab2.visualizer;
 
 import ru.itmo.primath.lab2.Data;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class VisualizerMain {
 
@@ -12,25 +11,10 @@ public class VisualizerMain {
         engine.run(
                 1280,
                 720,
-                entityProvider);
+                List.of(Data.TestFunctions),
+                -20,
+                -20,
+                40,
+                2000);
     }
-
-    private static final EntityProvider entityProvider = new EntityProvider() {
-        ArrayList<Entity> entities;
-
-        @Override
-        public Collection<Entity> getEntities() {
-            if (entities == null)
-                gen();
-            return entities;
-        }
-
-        private void gen() {
-            entities = new ArrayList<>();
-
-            Chunk chunk = new Chunk(Data.TestFunc1, -100, -100, 200, 1000);
-
-            entities.add(chunk.getEntity());
-        }
-    };
 }
