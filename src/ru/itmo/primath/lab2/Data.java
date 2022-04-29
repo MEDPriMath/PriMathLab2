@@ -1,18 +1,29 @@
 package ru.itmo.primath.lab2;
 
-import static java.lang.Math.sin;
-import static ru.itmo.primath.lab2.util.MathUtils.sqr;
-
 public class Data {
 
     public static final Function2[] TestFunctions = new Function2[] {
-            (x, y) -> sin(x) + sin(y),
-            (x, y) -> sin(x) * sin(y),
-            (x, y) -> (sqr(x/2) + sqr(y/2)) / 4,
-            (x, y) -> Math.pow(sqr(x/2), 0.65) + Math.pow(sqr(y/2), 0.55)
-                    + Math.pow(sqr((x-10)/2), 0.65) + Math.pow(sqr((y-5)/2), 0.55)
-            ,
-    };
+            (x, y) -> x * x + x + 2 * y + y * y,
+//            (x, y) -> sin(x) + sin(y),
+//            (x, y) -> sin(x) * sin(y),
+//            (x, y) -> (sqr(x/2) + sqr(y/2)) / 4,
+//            new Function2() {
+//                @Override
+//                public double value(double x, double y) {
+//                    return Math.pow(sqr(x/2), 0.65) + Math.pow(sqr(y/2), 0.55)
+//                            + Math.pow(sqr((x-10)/2), 0.65) + Math.pow(sqr((y-5)/2), 0.55);
+//                }
+//
+////                @Override
+//                public Vector2 grad(double x, double y) {
+//                    return Vector2();
+//                }
+            };
+//};
+//            (x, y) -> Math.pow(sqr(x/2), 0.65) + Math.pow(sqr(y/2), 0.55)
+//                    + Math.pow(sqr((x-10)/2), 0.65) + Math.pow(sqr((y-5)/2), 0.55)
+//            ,
+//    };
 
 //    public static final Function2 RosenbrocksValley = (x, y) -> sqr(1 - x) + 100 * sqr(y - sqr(x));
 //

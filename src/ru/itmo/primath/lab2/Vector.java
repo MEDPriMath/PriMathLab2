@@ -23,16 +23,16 @@ public abstract class Vector<T extends Vector<?>> {
         return coords[index];
     }
 
-//    public T increase(T other) {
-//        if (coords.length != other.coords.length) {
-//            throw new IllegalArgumentException(String.format("Different count of coords, %d and %d", coords.length, other.coords.length));
-//        }
-//        double[] newCoords = new double[coords.length];
-//        for (int i = 0; i < coords.length; i++) {
-//            newCoords[i] = coords[i] + other.coords[i];
-//        }
-//        return createVector(newCoords);
-//    }
+    public T increase(T other) {
+        if (coords.length != other.coords.length) {
+            throw new IllegalArgumentException(String.format("Different count of coords, %d and %d", coords.length, other.coords.length));
+        }
+        double[] newCoords = new double[coords.length];
+        for (int i = 0; i < coords.length; i++) {
+            newCoords[i] = coords[i] + other.coords[i];
+        }
+        return createVector(newCoords);
+    }
 
     public T decrease(T other) {
         if (coords.length != other.coords.length) {

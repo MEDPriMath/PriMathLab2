@@ -3,7 +3,6 @@ package ru.itmo.primath.lab2.methods;
 import ru.itmo.primath.lab2.Function2;
 import ru.itmo.primath.lab2.Vector2;
 import ru.itmo.primath.lab2.util.FibonacciMinimizer;
-import ru.itmo.primath.lab2.util.GoldenRationMinimizer;
 import ru.itmo.primath.lab2.util.Path;
 
 public class FibonacciGDMinimizer implements GDMinimizer {
