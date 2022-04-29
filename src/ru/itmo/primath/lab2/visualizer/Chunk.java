@@ -12,6 +12,8 @@ public class Chunk {
     public final float size;
     public final int steps;
     private Entity entity;
+    public float MIN;
+    public float MAX;
 
     private class Point{
         public final float x;
@@ -43,6 +45,7 @@ public class Chunk {
         this.z = z;
         this.size = size;
         this.steps = steps;
+        this.createEntity();
     }
 
     private void createEntity(){
@@ -103,6 +106,9 @@ public class Chunk {
                 minHeight = vertices[3 * i + 1];
         }
 
+        MAX = maxHeight;
+        MIN = minHeight;
+
         float[] colors = new float[nodes * 3];
         for (int i = 0; i < steps + 1; i++) {
             for (int j = 0; j < steps + 1; j++) {
@@ -116,7 +122,6 @@ public class Chunk {
     }
 
     public Entity getEntity() {
-        this.createEntity();
         return entity;
     }
 }

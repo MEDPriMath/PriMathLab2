@@ -69,10 +69,7 @@ import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glGetUniformLocation;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
-import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -85,6 +82,10 @@ public class VisualizerMain {
     private long window;
     private double windowWidth;
     private double windowHeight;
+    private int minPosition;
+    private int maxPosition;
+    private float minY;
+    private float maxY;
 
     public static void main(String[] args) {
         new VisualizerMain().run(1280, 720);
@@ -274,6 +275,10 @@ public class VisualizerMain {
                 readResourceFile("shaders/fragment.glsl"));
 
         projectionPosition = glGetUniformLocation(shader.program, "projection");
+
+        minPosition = glGetUniformLocation(shader.program, "min");
+        maxPosition = glGetUniformLocation(shader.program, "max");
+
         glUseProgram(shader.program);
 
 //        obj = new Entity(
@@ -293,6 +298,10 @@ public class VisualizerMain {
 //        );
 
         Chunk chunk = new Chunk(Data.TestFunc1, -100, -100, 200, 1000);
+
+        minY = chunk.MIN;
+        maxY = chunk.MAX;
+
         obj = chunk.getEntity();
 
         while (!glfwWindowShouldClose(window)) {
@@ -317,6 +326,10 @@ public class VisualizerMain {
             camera.apply();
             glGetFloatv(GL_MODELVIEW_MATRIX, projection);
             glUniformMatrix4fv(projectionPosition, false, projection);
+
+            glUniform1f(minPosition, minY);
+            glUniform1f(maxPosition, maxY);
+
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
