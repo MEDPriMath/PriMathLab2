@@ -1,4 +1,4 @@
-package ru.itmo.primath.lab2.visualizer;
+package ru.itmo.primath.lab2.visualizer.graphics;
 
 import static java.lang.Math.exp;
 import static org.lwjgl.opengl.GL11.glRotatef;

@@ -1,8 +1,8 @@
 package ru.itmo.primath.lab2.visualizer.services;
 
 import org.lwjgl.glfw.GLFW;
-import ru.itmo.primath.lab2.visualizer.Camera;
-import ru.itmo.primath.lab2.visualizer.Direction;
+import ru.itmo.primath.lab2.visualizer.graphics.Camera;
+import ru.itmo.primath.lab2.visualizer.graphics.Direction;
 
 import java.util.function.Consumer;
 

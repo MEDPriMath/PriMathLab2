@@ -1,6 +1,8 @@
 package ru.itmo.primath.lab2.visualizer;
 
 import ru.itmo.primath.lab2.Function2;
+import ru.itmo.primath.lab2.visualizer.graphics.Camera;
+import ru.itmo.primath.lab2.visualizer.graphics.Renderer;
 import ru.itmo.primath.lab2.visualizer.services.InputService;
 
 import java.util.List;

@@ -1,20 +1,24 @@
-package ru.itmo.primath.lab2.visualizer;
+package ru.itmo.primath.lab2.visualizer.graphics;
 
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
+import ru.itmo.primath.lab2.visualizer.Mesh;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW_MATRIX;
+import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glGetFloatv;
+import static org.lwjgl.opengl.GL11.glLineWidth;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glVertex3f;
+import static org.lwjgl.opengl.GL11C.GL_LINES;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
@@ -68,66 +72,16 @@ public class Renderer {
     }
 
     public void renderAxes() {
-        GL11.glBegin(GL_TRIANGLES);
+        glLineWidth(3);
+        glBegin(GL_LINES);
         {
-            int length = 100;
-            // x axis
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.0f, 0.0f, -0.01f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(length, 0.0f, -0.01f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.0f, 0.0f, 0.01f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(length, 0.0f, 0.01f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(length, 0.0f, -0.01f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.0f, 0.0f, 0.01f);
-
-            // z axis
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.01f, 0.0f, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.01f, 0.0f, length);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(-0.01f, 0.0f, length);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.01f, 0.0f, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(-0.01f, 0.0f, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(-0.01f, 0.0f, length);
-
-            // y axis
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.01f, 0.0f, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.01f, length, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(-0.01f, length, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(0.01f, 0.0f, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(-0.01f, 0.0f, 0.0f);
-
-            GL11.glColor3f(0.0f, 0.0f, 0.0f);
-            GL11.glVertex3f(-0.01f, length, 0.0f);
+            glVertex3f(0, 0, 0);
+            glVertex3f(100, 0, 0);
+            glVertex3f(0, 0, 0);
+            glVertex3f(0, 100, 0);
+            glVertex3f(0, 0, 0);
+            glVertex3f(0, 0, 100);
         }
-        GL11.glEnd();
+        glEnd();
     }
 }

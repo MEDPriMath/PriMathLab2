@@ -1,4 +1,4 @@
-package ru.itmo.primath.lab2.visualizer;
+package ru.itmo.primath.lab2.visualizer.graphics;
 
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
@@ -19,7 +19,7 @@ import static org.lwjgl.opengl.GL20.glShaderSource;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
 
 public class Shader {
-    int program;
+    public final int program;
 
     public Shader(String vertexShaderCode, String fragmentShaderCode) {
         program = glCreateProgram();
