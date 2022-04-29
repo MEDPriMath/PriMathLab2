@@ -9,7 +9,7 @@ public class Camera {
     double scaleFactor = exp(scale);
 
     public Camera() {
-        this(0, 0, 0, 0, 0);
+        reset();
     }
 
     public Camera(float x, float y, float z, float yaw, float pitch) {
@@ -21,11 +21,11 @@ public class Camera {
     }
 
     public void reset() {
-        x = 0;
-        y = 0;
-        z = 0;
-        yaw = 0;
-        pitch = 0;
+        x = -3;
+        y = 8;
+        z = -3;
+        yaw = -135;
+        pitch = -45;
         scale = 0;
         scaleFactor = exp(scale);
     }

@@ -11,6 +11,7 @@ public class CustomGLFWCursorPosCallback extends GLFWCursorPosCallback {
     private final InputService inputService;
     private final int[] width = new int[1];
     private final int[] height = new int[1];
+    private boolean hasActed = false;
 
     public CustomGLFWCursorPosCallback(InputService inputService) {
         this.inputService = inputService;
@@ -23,7 +24,11 @@ public class CustomGLFWCursorPosCallback extends GLFWCursorPosCallback {
         double dy = ypos - height[0] / 2f;
 
         if (dx != 0 || dy != 0) {
-            inputService.onMouseMove(dx, dy);
+            if (hasActed) {
+                inputService.onMouseMove(dx, dy);
+            } else {
+                hasActed = true;
+            }
             glfwSetCursorPos(window, width[0] / 2f, height[0] / 2f);
         }
     }
