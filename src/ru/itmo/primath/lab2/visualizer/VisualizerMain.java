@@ -8,9 +8,7 @@ import org.lwjgl.glfw.GLFWWindowRefreshCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
-import ru.itmo.primath.lab2.Function2;
-import ru.itmo.primath.lab2.Vector2;
-import ru.itmo.primath.lab2.util.TemporaryFunctionStorage;
+import ru.itmo.primath.lab2.Data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -294,7 +292,7 @@ public class VisualizerMain {
 //                        1, 2, 3}
 //        );
 
-        Chunk chunk = new Chunk(TemporaryFunctionStorage.squareFunction1, 0, 0, 1, 25);
+        Chunk chunk = new Chunk(Data.TestFunc1, -100, -100, 200, 1000);
         obj = chunk.getEntity();
 
         while (!glfwWindowShouldClose(window)) {
