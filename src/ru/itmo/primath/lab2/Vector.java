@@ -64,6 +64,14 @@ public abstract class Vector<T extends Vector<?>> {
         return sqrt(sum);
     }
 
+    public double length() {
+        double sum = 0;
+        for (double coord : coords) {
+            sum += sqr(coord);
+        }
+        return sqrt(sum);
+    }
+
     protected abstract T createVector(double... coords);
 
     @Override

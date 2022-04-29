@@ -2,6 +2,8 @@ package ru.itmo.primath.lab2.visualizer;
 
 import ru.itmo.primath.lab2.Function2;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11C.GL_TRIANGLES;
@@ -21,8 +23,8 @@ public class Mesh {
     private final int indicesBufferId;
     private final int vertexArrayId;
     private final int indicesCount;
-    public float MAX = Float.MIN_VALUE;
-    public float MIN = Float.MAX_VALUE;
+    public float minY = Float.MAX_VALUE;
+    public float maxY = Float.MIN_VALUE;
 
     public Mesh(Function2 function, float xPos, float zPos, float size, int steps) {
         int verticesCount = sqr(steps + 1);
@@ -34,10 +36,12 @@ public class Mesh {
                 verticesBuffer[index + 2] = zPos + size * z / steps;
                 verticesBuffer[index + 1] = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
 
-                if (MAX < function.value(verticesBuffer[index], verticesBuffer[index + 2]))
-                    MAX = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
-                if (MIN > function.value(verticesBuffer[index], verticesBuffer[index + 2]))
-                    MIN = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
+                maxY = max(maxY, verticesBuffer[index + 1]);
+                minY = min(minY, verticesBuffer[index + 1]);
+//                if (maxY < function.value(verticesBuffer[index], verticesBuffer[index + 2]))
+//                    maxY = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
+//                if (minY > function.value(verticesBuffer[index], verticesBuffer[index + 2]))
+//                    minY = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
                 index += 3;
             }
 
@@ -68,8 +72,6 @@ public class Mesh {
     }
 
     public void render() {
-        // TODO Привет, странник. Как думаешь, почему эта строка меняет цвет осей на зелёный?
-        // TODO Ans: Привет, Данилаа56, а у меня не меняет
         glBindVertexArray(vertexArrayId);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBufferId);
         glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);

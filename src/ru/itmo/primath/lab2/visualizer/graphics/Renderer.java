@@ -24,17 +24,22 @@ import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniform1f;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
+import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static ru.itmo.primath.lab2.util.IOUtils.readResourceFile;
 
 public class Renderer {
-    Shader mainShader, meshShader, defaultShader, colorable;
+    Shader mainShader, meshShader, defaultShader, colorableShader;
 
-    int projectionMainPosition, projectionMeshPosition, projectionDefaultPosition;
+    int projectionMainPosition, projectionMeshPosition, projectionDefaultPosition, projectionColorablePosition;
 
-    int min, max;
+    int minPosition, maxPosition;
     float[] projection = new float[16];
 
     private final Camera camera;
@@ -52,18 +57,17 @@ public class Renderer {
         defaultShader = new Shader(
                 readResourceFile("shaders/default_vertex.glsl"),
                 readResourceFile("shaders/default_fragment.glsl"));
-        colorable = new Shader(
-                readResourceFile("shaders/mesh_vertex.glsl"),
-                readResourceFile("shaders/colorable_mesh.glsl"));
+        colorableShader = new Shader(
+                readResourceFile("shaders/colorable_vertex.glsl"),
+                readResourceFile("shaders/colorable_fragment.glsl"));
 
         projectionMainPosition = glGetUniformLocation(mainShader.program, "projection");
         projectionMeshPosition = glGetUniformLocation(meshShader.program, "projection");
-
-        min = glGetUniformLocation(meshShader.program, "min");
-        max = glGetUniformLocation(meshShader.program, "max");
-
         projectionDefaultPosition = glGetUniformLocation(defaultShader.program, "projection");
+        projectionColorablePosition = glGetUniformLocation(colorableShader.program, "projection");
 
+        minPosition = glGetUniformLocation(colorableShader.program, "min");
+        maxPosition = glGetUniformLocation(colorableShader.program, "max");
 
         createAxes();
 
@@ -78,15 +82,15 @@ public class Renderer {
         glEnable(GL_DEPTH_TEST);
         camera.apply();
         {
-            glUseProgram(colorable.program);
+            glUseProgram(colorableShader.program);
 
             glEnableVertexAttribArray(0);
 
             glGetFloatv(GL_MODELVIEW_MATRIX, projection);
-            glUniformMatrix4fv(projectionMeshPosition, false, projection);
+            glUniformMatrix4fv(projectionColorablePosition, false, projection);
 
-            glUniform1f(min, activeMesh.MIN);
-            glUniform1f(max, activeMesh.MAX);
+            glUniform1f(minPosition, activeMesh.minY);
+            glUniform1f(maxPosition, activeMesh.maxY);
 
             activeMesh.render();
 
