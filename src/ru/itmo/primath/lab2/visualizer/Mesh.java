@@ -3,6 +3,7 @@ package ru.itmo.primath.lab2.visualizer;
 import ru.itmo.primath.lab2.Function2;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11C.*;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
@@ -64,8 +65,9 @@ public class Mesh {
 
     public void render() {
         // TODO Привет, странник. Как думаешь, почему эта строка меняет цвет осей на зелёный?
+        //TODO Ans: Привет, Данилаа56, а у меня не меняет
         glBindVertexArray(vertexArrayId);
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBufferId);
-//        glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBufferId);
+        glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
     }
 }
