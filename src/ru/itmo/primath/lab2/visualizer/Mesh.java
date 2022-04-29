@@ -21,6 +21,8 @@ public class Mesh {
     private final int indicesBufferId;
     private final int vertexArrayId;
     private final int indicesCount;
+    public float MAX = Float.MIN_VALUE;
+    public float MIN = Float.MAX_VALUE;
 
     public Mesh(Function2 function, float xPos, float zPos, float size, int steps) {
         int verticesCount = sqr(steps + 1);
@@ -31,8 +33,14 @@ public class Mesh {
                 verticesBuffer[index] = xPos + size * x / steps;
                 verticesBuffer[index + 2] = zPos + size * z / steps;
                 verticesBuffer[index + 1] = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
+
+                if (MAX < function.value(verticesBuffer[index], verticesBuffer[index + 2]))
+                    MAX = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
+                if (MIN > function.value(verticesBuffer[index], verticesBuffer[index + 2]))
+                    MIN = (float) function.value(verticesBuffer[index], verticesBuffer[index + 2]);
                 index += 3;
             }
+
         }
 
         indicesCount = sqr(steps) * 2 * 3;
