@@ -6,6 +6,10 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 public class Camera {
     float x, y, z, yaw, pitch;
 
+    public Camera() {
+        this(0, 0, 0, 0, 0);
+    }
+
     public Camera(float x, float y, float z, float yaw, float pitch) {
         this.x = x;
         this.y = y;
@@ -29,31 +33,27 @@ public class Camera {
         if (this.pitch > 90) this.pitch = 90;
     }
 
-    void move(Direction direction, double speed) {
+    public void move(Direction direction, double speed) {
         double rads = yaw / 180 * Math.PI;
         switch (direction) {
-            case FORWARD:
+            case FORWARD -> {
                 z -= speed * Math.cos(rads);
                 x -= speed * Math.sin(rads);
-                break;
-            case BACKWARD:
+            }
+            case BACKWARD -> {
                 z += speed * Math.cos(rads);
                 x += speed * Math.sin(rads);
-                break;
-            case LEFT:
+            }
+            case LEFT -> {
                 x -= speed * Math.cos(rads);
                 z += speed * Math.sin(rads);
-                break;
-            case RIGHT:
+            }
+            case RIGHT -> {
                 x += speed * Math.cos(rads);
                 z -= speed * Math.sin(rads);
-                break;
-            case UP:
-                y += speed;
-                break;
-            case DOWN:
-                y -= speed;
-                break;
+            }
+            case UP -> y += speed;
+            case DOWN -> y -= speed;
         }
     }
 }

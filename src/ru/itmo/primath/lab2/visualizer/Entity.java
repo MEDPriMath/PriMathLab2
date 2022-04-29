@@ -16,14 +16,27 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Entity {
-    private final int verticesBufferId;
-    private final int colorsBufferId;
-    private final int indicesBufferId;
+    private int verticesBufferId;
+    private int colorsBufferId;
+    private int indicesBufferId;
 
-    private final int vertexArrayId;
-    private final int indicesCount;
+    private int vertexArrayId;
+    private int indicesCount;
+
+    private boolean isInit = false;
+
+    protected Entity() {}
 
     public Entity(float[] vertices, float[] colors, int[] indices) {
+        init(vertices, colors, indices);
+    }
+
+    protected void init(float[] vertices, float[] colors, int[] indices) {
+        if (isInit) {
+            throw new IllegalStateException("Already inited");
+        }
+        isInit = true;
+
         if (vertices.length / 3 != colors.length / 3) {
             throw new IllegalArgumentException("Vertices and colors counts differ");
         }
@@ -53,6 +66,9 @@ public class Entity {
     }
 
     public void render() {
+        if (!isInit) {
+            throw new IllegalStateException("Entity has not been inited");
+        }
         glBindVertexArray(vertexArrayId);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBufferId);
         glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, 0);
