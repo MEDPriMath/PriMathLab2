@@ -4,7 +4,7 @@ import ru.itmo.primath.lab2.Data;
 
 import java.util.List;
 
-public class VisualizerMain {
+public class Main {
 
     public static void main(String[] args) {
         Engine engine = new Engine();

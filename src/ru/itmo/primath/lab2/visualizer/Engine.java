@@ -1,6 +1,9 @@
 package ru.itmo.primath.lab2.visualizer;
 
 import ru.itmo.primath.lab2.Function2;
+import ru.itmo.primath.lab2.Vector2;
+import ru.itmo.primath.lab2.methods.ConstantStepGDMinimizer;
+import ru.itmo.primath.lab2.util.Path;
 import ru.itmo.primath.lab2.visualizer.graphics.Camera;
 import ru.itmo.primath.lab2.visualizer.graphics.Renderer;
 import ru.itmo.primath.lab2.visualizer.services.InputService;
@@ -21,8 +24,10 @@ public class Engine {
     Window window;
     Renderer renderer;
 
+    List<Function2> meshFunctions;
     List<Mesh> meshes;
     Mesh activeMesh;
+    Renderable activePath;
 
     public void run(int windowWidth,
                     int windowHeight,
@@ -36,10 +41,11 @@ public class Engine {
         }
 
         camera = new Camera();
-        inputService = new InputService(camera, this::chooseMesh);
+        inputService = new InputService(camera, this::chooseMesh, this::activatePath);
         window = new Window(inputService, windowWidth, windowHeight);
 
         renderer = new Renderer(camera);
+        this.meshFunctions = meshFunctions;
         loadMeshes(meshFunctions, meshX, meshY, meshSize, meshResolution);
         chooseMesh(0);
 
@@ -71,10 +77,22 @@ public class Engine {
     private void loop() {
         while (!glfwWindowShouldClose(window.windowHandle)) {
             inputService.checkKeys(window.windowHandle);
-            renderer.render(activeMesh);
+            renderer.render(activeMesh, activePath);
 
             glfwSwapBuffers(window.windowHandle);
             glfwPollEvents();
         }
+    }
+
+    private void activatePath() {
+        if (activePath != null) {
+            activePath.dispose();
+            activePath = null;
+        }
+        var f = meshFunctions.get(meshes.indexOf(activeMesh));
+        ConstantStepGDMinimizer minimizer = new ConstantStepGDMinimizer();
+        Path<Vector2> path = minimizer.minimize(f,
+                new Vector2(camera.getX(), camera.getZ()), 1E-6, 1);
+        activePath = Renderable.pathLine(path, f);
     }
 }

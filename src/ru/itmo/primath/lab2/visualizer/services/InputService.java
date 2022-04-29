@@ -11,6 +11,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_P;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
@@ -26,10 +27,12 @@ import static org.lwjgl.opengl.GL11.glViewport;
 public class InputService {
     private final Camera camera;
     private final Consumer<Integer> chooseMesh;
+    private final Runnable activatePath;
 
-    public InputService(Camera camera, Consumer<Integer> chooseMesh) {
+    public InputService(Camera camera, Consumer<Integer> chooseMesh, Runnable activatePath) {
         this.camera = camera;
         this.chooseMesh = chooseMesh;
+        this.activatePath = activatePath;
     }
 
     public void onMouseMove(double dx, double dy) {
@@ -45,6 +48,7 @@ public class InputService {
             } else switch (key) {
                 case GLFW_KEY_ESCAPE -> glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
                 case GLFW_KEY_R -> camera.reset();
+                case GLFW_KEY_P -> activatePath.run();
             }
         }
     }

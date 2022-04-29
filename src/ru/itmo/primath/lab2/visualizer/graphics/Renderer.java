@@ -47,7 +47,7 @@ public class Renderer {
 
         mainShader = new Shader(
                 readResourceFile("shaders/vertex.glsl"),
-                readResourceFile("shaders/fragment.glsl"));
+                readResourceFile("shaders/colorful_fragment.glsl"));
         meshShader = new Shader(
                 readResourceFile("shaders/mesh_vertex.glsl"),
                 readResourceFile("shaders/mesh_white_cell.glsl"));
@@ -64,7 +64,7 @@ public class Renderer {
         glClearColor(0.2f, 0.5f, 1, 0.0f);
     }
 
-    public void render(Mesh activeMesh) {
+    public void render(Mesh activeMesh, Renderable activePath) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glPushMatrix();
@@ -87,6 +87,10 @@ public class Renderer {
 
             glUniformMatrix4fv(projectionDefaultPosition, false, projection);
             renderAxes();
+
+            if (activePath != null) {
+                activePath.render();
+            }
         }
         glDisable(GL_DEPTH_TEST);
         glPopMatrix();
@@ -117,7 +121,7 @@ public class Renderer {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 28, 0);
         glVertexAttribPointer(1, 4, GL_FLOAT, false, 28, 12);
 
-        axes = new Renderable(vertexArrayId, indicesBufferId, indices.length, GL_LINES);
+        axes = new Renderable(vertexArrayId, indicesBufferId, indices.length, GL_LINES, verticesBufferId);
     }
 
     public void renderAxes() {

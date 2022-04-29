@@ -74,4 +74,16 @@ public class Camera {
         scale += dScale;
         scaleFactor = exp(scale);
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getZ() {
+        return z;
+    }
 }
