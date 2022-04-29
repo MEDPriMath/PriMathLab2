@@ -17,7 +17,7 @@ public class GoldenRatioGDMinimizer implements GDMinimizer {
         Vector2 prevPoint = startPoint;
         Vector2 prevGrad = func.grad(prevPoint);
 
-        step = GoldenRationMinimizer.calcMinimize(-100, 100, prevPoint, prevGrad, func);
+        step = GoldenRationMinimizer.CalcMinimize(-100, 100, prevPoint, prevGrad, func);
 
         Vector2 currPoint = prevPoint.decrease(prevGrad.multiply(step));
         path.addPoint(currPoint);
@@ -26,7 +26,7 @@ public class GoldenRatioGDMinimizer implements GDMinimizer {
 
         while (diff > epsilon) {
             Vector2 currGrad = func.grad(currPoint);
-            step = GoldenRationMinimizer.calcMinimize(-100, 100, currPoint, currGrad, func);
+            step = GoldenRationMinimizer.CalcMinimize(-100, 100, currPoint, currGrad, func);
             prevPoint = currPoint;
             currPoint = prevPoint.decrease(prevGrad.multiply(step));
             path.addPoint(currPoint);

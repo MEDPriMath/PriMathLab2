@@ -6,7 +6,7 @@ import ru.itmo.primath.lab2.Vector2;
 public class GoldenRationMinimizer {
     private static final double RATIO = 0.38196601125d;
 
-    public static double calcMinimize(double a, double b, Vector2 point, Vector2 grad, Function2 func) {
+    public static double CalcMinimize(double a, double b, Vector2 point, Vector2 grad, Function2 func) {
         var p1 = a + (b - a) * RATIO;
         var p2 = b - (b - a) * RATIO; // a ---- p1 ---- p2 ---- b
 
