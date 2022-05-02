@@ -11,6 +11,8 @@ import ru.itmo.primath.lab2.visualizer.services.InputService;
 
 import java.nio.IntBuffer;
 
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_HIDDEN;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
@@ -23,6 +25,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
@@ -57,6 +60,8 @@ public class Window {
         glfwSetWindowRefreshCallback(windowHandle, new CustomGLFWWindowRefreshCallback(inputService));
         glfwSetCursorPosCallback(windowHandle, new CustomGLFWCursorPosCallback(inputService));
         glfwSetScrollCallback(windowHandle, new CustomGLFWScrollCallback(inputService));
+
+        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         // Get the thread stack and push a new frame
         try (MemoryStack stack = stackPush()) {
