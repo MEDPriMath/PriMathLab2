@@ -66,12 +66,12 @@ public class InputService {
         }
     }
 
-    public void onWindowSizeChanged(int width, int height) {
+    public void onWindowResize(int width, int height) {
         float ratio = (float) width / height;
-        double k = 0.1;
+        double k = 0.001;
         glViewport(0, 0, width, height);
         glLoadIdentity();
-        glFrustum(-ratio * k, ratio * k, -k, k, k * 2, 100);
+        glFrustum(-ratio * k, ratio * k, -k, k, k * 2, 1000);
     }
 
     public void checkKeys(long window) {

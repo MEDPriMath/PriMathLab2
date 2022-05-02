@@ -20,7 +20,7 @@ public class CustomGLFWWindowRefreshCallback extends GLFWWindowRefreshCallback {
         int prevHeight = height[0];
         glfwGetWindowSize(window, width, height);
         if (prevWidth != width[0] || prevHeight != height[0]) {
-            inputService.onWindowSizeChanged(width[0], height[0]);
+            inputService.onWindowResize(width[0], height[0]);
         }
     }
 }
