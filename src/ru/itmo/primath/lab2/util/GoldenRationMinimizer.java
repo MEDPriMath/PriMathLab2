@@ -1,7 +1,7 @@
 package ru.itmo.primath.lab2.util;
 
-import ru.itmo.primath.lab2.Function2;
-import ru.itmo.primath.lab2.Vector2;
+import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Vector2;
 
 public class GoldenRationMinimizer {
     private static final double RATIO = 0.38196601125d;

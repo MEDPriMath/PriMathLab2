@@ -1,12 +1,19 @@
 package ru.itmo.primath.lab2;
 
+import ru.itmo.primath.lab2.math.Function2;
+
+import static java.lang.Math.sin;
+import static ru.itmo.primath.lab2.util.MathUtils.sqr;
+
 public class Data {
 
     public static final Function2[] TestFunctions = new Function2[] {
             (x, y) -> x * x + x + 2 * y + y * y,
-//            (x, y) -> sin(x) + sin(y),
-//            (x, y) -> sin(x) * sin(y),
-//            (x, y) -> (sqr(x/2) + sqr(y/2)) / 4,
+            (x, y) -> sin(x) + sin(y),
+            (x, y) -> sin(x) * sin(y),
+            (x, y) -> (sqr(x/2) + sqr(y/2)) / 4,
+            (x, y) -> (sqr(x/2) + sqr(y/3)) / 4,
+            (x, y) -> 1*x*x*y*y + 2*x*x*y + 3*x*x + 4*x + 5*x*y*y + 6*x*y + 7*y*y + 8*y,
 //            new Function2() {
 //                @Override
 //                public double value(double x, double y) {

@@ -1,15 +1,15 @@
 package ru.itmo.primath.lab2.methods;
 
-import ru.itmo.primath.lab2.Function2;
-import ru.itmo.primath.lab2.Vector2;
+import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Vector2;
 import ru.itmo.primath.lab2.util.Path;
 
 public class SplitStepGDMinimizer implements GDMinimizer {
-    private double split = 0.95;
+    private double split = 0.75;
 
     @Override
-    public Path minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
-        Path path = new Path();
+    public Path<Vector2> minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
+        Path<Vector2> path = new Path<Vector2>();
         path.addPoint(startPoint);
 
         Vector2 prevPoint = startPoint;

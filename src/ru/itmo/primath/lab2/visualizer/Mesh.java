@@ -1,6 +1,6 @@
 package ru.itmo.primath.lab2.visualizer;
 
-import ru.itmo.primath.lab2.Function2;
+import ru.itmo.primath.lab2.math.Function2;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL11C.glDrawElements;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
@@ -69,6 +70,7 @@ public class Mesh {
         glBindVertexArray(vertexArrayId);
         glBindBuffer(GL_ARRAY_BUFFER, verticesBufferId);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, NULL);
+        glEnableVertexAttribArray(0);
     }
 
     public void render() {

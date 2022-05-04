@@ -1,4 +1,4 @@
-package ru.itmo.primath.lab2;
+package ru.itmo.primath.lab2.math;
 
 public class Vector2 extends Vector<Vector2> {
 

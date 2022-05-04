@@ -1,7 +1,7 @@
-package ru.itmo.primath.lab2.visualizer;
+package ru.itmo.primath.lab2.visualizer.graphics;
 
-import ru.itmo.primath.lab2.Function2;
-import ru.itmo.primath.lab2.Vector2;
+import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Vector2;
 import ru.itmo.primath.lab2.util.Path;
 
 import static org.lwjgl.opengl.GL11.GL_LINE_STRIP;
@@ -24,6 +24,15 @@ public class Renderable {
 
     private final int drawMode;
     private final int[] buffersToDispose;
+
+    public Renderable(float[] vertices, int[] indices, int drawMode) {
+        int verticesBuffer = verticesBuffer(vertices);
+        vertexArrayId = vertexArray7(verticesBuffer);
+        indicesBufferId = indicesBuffer(indices);
+        indicesCount = indices.length;
+        this.drawMode = drawMode;
+        buffersToDispose = new int[0];
+    }
 
     public Renderable(int vertexArrayId, int indicesBufferId, int indicesCount, int drawMode, int... buffersToDispose) {
         this.vertexArrayId = vertexArrayId;

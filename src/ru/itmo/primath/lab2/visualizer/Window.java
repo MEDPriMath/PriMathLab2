@@ -15,6 +15,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_HIDDEN;
 import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
@@ -39,20 +40,30 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Window {
     public final long windowHandle;
 
-    public Window(InputService inputService, int initialWidth, int initialHeight) {
+    public Window(InputService inputService, int initialWidth, int initialHeight, boolean isFullscreen) {
         GLFWErrorCallback.createPrint(System.err).set();
 
-        // Initialize GLFW. Most GLFW functions will not work before doing this.
         if (!glfwInit())
             throw new IllegalStateException("Unable to initialize GLFW");
+
+        GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        if (videoMode == null) {
+            throw new RuntimeException("'videoMode' is not expected to be null");
+        }
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
 
-        // Create the window
-        windowHandle = glfwCreateWindow(initialWidth, initialHeight, "Pri Math Lab 2", NULL, NULL);
+        if (isFullscreen) {
+            windowHandle = glfwCreateWindow(
+                    videoMode.width(), videoMode.height(), "Pri Math Lab 2", glfwGetPrimaryMonitor(), NULL);
+        } else {
+            glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+            windowHandle = glfwCreateWindow(initialWidth, initialHeight, "Pri Math Lab 2", NULL, NULL);
+        }
+
         if (windowHandle == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -71,17 +82,11 @@ public class Window {
             // Get the window size passed to glfwCreateWindow
             glfwGetWindowSize(windowHandle, pWidth, pHeight);
 
-            // Get the resolution of the primary monitor
-            GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-            if (vidMode == null) {
-                throw new RuntimeException("'vidMode' is not expected to be null");
-            }
-
             // Center the window
             glfwSetWindowPos(
                     windowHandle,
-                    (vidMode.width() - pWidth.get(0)) / 2,
-                    (vidMode.height() - pHeight.get(0)) / 2
+                    (videoMode.width() - pWidth.get(0)) / 2,
+                    (videoMode.height() - pHeight.get(0)) / 2
             );
         } // the stack frame is popped automatically
 

@@ -1,4 +1,4 @@
-package ru.itmo.primath.lab2;
+package ru.itmo.primath.lab2.math;
 
 import static java.lang.Math.sqrt;
 import static ru.itmo.primath.lab2.util.MathUtils.sqr;

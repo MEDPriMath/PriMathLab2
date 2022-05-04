@@ -1,4 +1,4 @@
-package ru.itmo.primath.lab2.visualizer.graphics;
+package ru.itmo.primath.lab2.visualizer.shaders;
 
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
@@ -17,11 +17,12 @@ import static org.lwjgl.opengl.GL20.glGetShaderi;
 import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
+import static ru.itmo.primath.lab2.visualizer.graphics.GraphicsUtils.checkGLError;
 
-public class Shader {
+public class ShaderProgram {
     public final int program;
 
-    public Shader(String vertexShaderCode, String fragmentShaderCode) {
+    public ShaderProgram(String vertexShaderCode, String fragmentShaderCode) {
         program = glCreateProgram();
 
         int vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderCode, program);
@@ -40,6 +41,10 @@ public class Shader {
 
     private int compileShader(int type, String code, int program) {
         int shaderId = glCreateShader(type);
+        checkGLError();
+        if (shaderId == 0) {
+            throw new RuntimeException("glCreateShader returned 0");
+        }
         glShaderSource(shaderId, code);
         glCompileShader(shaderId);
         if (glGetShaderi(shaderId, GL_COMPILE_STATUS) != GL_TRUE) {

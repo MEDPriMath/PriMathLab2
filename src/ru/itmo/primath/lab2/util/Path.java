@@ -1,6 +1,6 @@
 package ru.itmo.primath.lab2.util;
 
-import ru.itmo.primath.lab2.Vector;
+import ru.itmo.primath.lab2.math.Vector;
 
 import java.util.ArrayList;
 import java.util.List;

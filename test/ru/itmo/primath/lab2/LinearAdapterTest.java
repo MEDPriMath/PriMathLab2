@@ -3,6 +3,8 @@ package ru.itmo.primath.lab2;
 import org.junit.jupiter.api.Test;
 import ru.itmo.primath.lab2.linearminimizers.GoldenRationMinimizer;
 import ru.itmo.primath.lab2.linearminimizers.LinearMinimizerAdapter;
+import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Vector2;
 
 public class LinearAdapterTest {
     @Test
