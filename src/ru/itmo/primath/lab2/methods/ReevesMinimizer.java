@@ -12,17 +12,22 @@ public class ReevesMinimizer implements GDMinimizer {
         Path path = new Path();
         path.addPoint(startPoint);
 
+
         Vector2 prevPoint = startPoint;
         Vector2 prevGrad = func.grad(prevPoint);
 
+        //критерий выхода
         if (prevGrad.length() < epsilon) {
             return path;
         }
 
+        //коэф d, при 0 итерации является градиентом начальной точки, во всех остальных
+        //итерациях высчитывается, как currGrad + prevGrad * b (смотри про b далее)
         var d = prevGrad;
 
         final float range = 2.5f;
 
+        //ищем шаг по критерию минимума
         step = LinearMinimizerAdapter.minimize(new GoldenRationMinimizer(), epsilon, 0, range,
                 prevPoint, d, func);
 
@@ -33,7 +38,9 @@ public class ReevesMinimizer implements GDMinimizer {
         double diff = currPoint.distance(prevPoint);
 
         while (diff > epsilon && currGrad.length() > epsilon) {
+            //b - коэф, высчитывающийся как отношение квадрата длины curGrad к квадрату длины prevGrad
             double b = Math.pow(currGrad.length(), 2) / Math.pow(prevGrad.length(), 2);
+
             d = currGrad.increase(prevGrad.multiply(b));
             step = LinearMinimizerAdapter.minimize(new GoldenRationMinimizer(), epsilon, 0, range,
                     currPoint, d, func);
