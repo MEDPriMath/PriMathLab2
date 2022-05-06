@@ -16,9 +16,14 @@ public class EngineService {
     }
 
     public void chooseMesh(int index) {
+        if (index < 0)
+            index = 0;
         if (index >= engineContext.meshes.size())
             index = engineContext.meshes.size() - 1;
+        if (engineContext.activeMesh == engineContext.meshes.get(index))
+            return;
         engineContext.activeMesh = engineContext.meshes.get(index);
+        engineContext.activePath = null;
     }
 
     public void activatePath(GDMinimizer minimizer) {

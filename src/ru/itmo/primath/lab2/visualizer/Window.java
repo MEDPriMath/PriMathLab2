@@ -85,8 +85,10 @@ public class Window {
             // Center the window
             glfwSetWindowPos(
                     windowHandle,
-                    (videoMode.width() - pWidth.get(0)) / 2,
-                    (videoMode.height() - pHeight.get(0)) / 2
+                    (videoMode.width() - pWidth.get(0)),
+                    (0)
+//                    (videoMode.width() - pWidth.get(0)) / 2,
+//                    (videoMode.height() - pHeight.get(0)) / 2
             );
         } // the stack frame is popped automatically
 
