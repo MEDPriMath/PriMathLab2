@@ -6,37 +6,41 @@ import ru.itmo.primath.lab2.math.Function2;
 import ru.itmo.primath.lab2.math.Vector2;
 import ru.itmo.primath.lab2.util.Path;
 
-public class GoldenRatioGDMinimizer implements GDMinimizer {
-
+public class ReevesMinimizer implements GDMinimizer {
     @Override
     public Path<Vector2> minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
-        Path<Vector2> path = new Path<>();
+        Path path = new Path();
         path.addPoint(startPoint);
 
         Vector2 prevPoint = startPoint;
         Vector2 prevGrad = func.grad(prevPoint);
 
+        if (prevGrad.length() < epsilon) {
+            return path;
+        }
+
+        var d = prevGrad;
+
         final float range = 2.5f;
 
         step = LinearMinimizerAdapter.minimize(new GoldenRationMinimizer(), epsilon, 0, range,
-                prevPoint, prevGrad, func);
+                prevPoint, d, func);
 
-        // (x1, y1) - step * (x2, y2) <- градиент
-        // f(x1 - step * x2) -> min
-
-        Vector2 currPoint = prevPoint.decrease(prevGrad.multiply(step));
+        Vector2 currPoint = prevPoint.decrease(d.multiply(step));
+        Vector2 currGrad = func.grad(currPoint);
         path.addPoint(currPoint);
 
         double diff = currPoint.distance(prevPoint);
 
-        while (diff > epsilon && path.length() < 500) {
-            Vector2 currGrad = func.grad(currPoint);
+        while (diff > epsilon && currGrad.length() > epsilon) {
+            double b = Math.pow(currGrad.length(), 2) / Math.pow(prevGrad.length(), 2);
+            d = currGrad.increase(prevGrad.multiply(b));
             step = LinearMinimizerAdapter.minimize(new GoldenRationMinimizer(), epsilon, 0, range,
-                    currPoint, currGrad, func);
+                    currPoint, d, func);
             prevPoint = currPoint;
-            currPoint = prevPoint.decrease(prevGrad.multiply(step));
-            path.addPoint(currPoint);
             prevGrad = currGrad;
+            currPoint = prevPoint.decrease(d.multiply(step));
+            path.addPoint(currPoint);
             diff = currPoint.distance(prevPoint);
         }
 

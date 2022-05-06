@@ -23,8 +23,6 @@ public class SplitStepGDMinimizer implements GDMinimizer {
         double diff = currPoint.distance(prevPoint);
 
         while (diff > epsilon) {
-            //todo проверить правильность условия Армихо
-
             // Fxk - Fxk+1 > какая-нибудь константа * шаг * квадрат длины градиента
             if (prevValue - currValue > Math.pow(10, -3) * step * Math.pow(prevGrad.length(), 2)) {
                 path.addPoint(currPoint);

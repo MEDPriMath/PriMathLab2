@@ -9,6 +9,6 @@ import ru.itmo.primath.lab2.util.Path;
  */
 
 public interface MyGDMinimizer {
-    Path<Vector2> minimize(Function2 func, Vector2 startPoint, double epsilon, double startStep);
+    Path<Vector2> minimize(Function2 func, Vector2 startPoint, double epsilon, double step);
 }
 
