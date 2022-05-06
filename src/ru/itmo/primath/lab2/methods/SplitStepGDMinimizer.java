@@ -8,8 +8,8 @@ public class SplitStepGDMinimizer implements GDMinimizer {
     private double split = 0.75;
 
     @Override
-    public Path<Vector2> minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
-        Path<Vector2> path = new Path<Vector2>();
+    public Path minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
+        Path path = new Path();
         path.addPoint(startPoint);
 
         Vector2 prevPoint = startPoint;
@@ -22,7 +22,10 @@ public class SplitStepGDMinimizer implements GDMinimizer {
 
         double diff = currPoint.distance(prevPoint);
 
+        int i = 0;
         while (diff > epsilon) {
+            //todo проверить правильность условия Армихо
+            ++i;
             // Fxk - Fxk+1 > какая-нибудь константа * шаг * квадрат длины градиента
             if (prevValue - currValue > Math.pow(10, -3) * step * Math.pow(prevGrad.length(), 2)) {
                 path.addPoint(currPoint);
@@ -37,7 +40,7 @@ public class SplitStepGDMinimizer implements GDMinimizer {
                 step = split * step;
             }
         }
-
+        System.out.println(this.getClass().getSimpleName() + "steps: " + i);
         return path;
     }
 

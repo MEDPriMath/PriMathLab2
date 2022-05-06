@@ -36,8 +36,9 @@ public class ReevesMinimizer implements GDMinimizer {
         path.addPoint(currPoint);
 
         double diff = currPoint.distance(prevPoint);
-
+        int i = 0;
         while (diff > epsilon && currGrad.length() > epsilon) {
+            ++i;
             //b - коэф, высчитывающийся как отношение квадрата длины curGrad к квадрату длины prevGrad
             double b = Math.pow(currGrad.length(), 2) / Math.pow(prevGrad.length(), 2);
 
@@ -49,8 +50,11 @@ public class ReevesMinimizer implements GDMinimizer {
             currPoint = prevPoint.decrease(d.multiply(step));
             path.addPoint(currPoint);
             diff = currPoint.distance(prevPoint);
+            if (i == 500)
+                break;
         }
 
+        System.out.println(this.getClass().getSimpleName() + "steps: " + i);
         return path;
     }
 }

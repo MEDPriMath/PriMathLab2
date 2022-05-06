@@ -19,8 +19,9 @@ public class ConstantStepGDMinimizer implements GDMinimizer {
         path.addPoint(currPoint);
 
         double diff = currPoint.distance(prevPoint);
-
+        int i = 0;
         while (diff > epsilon) {
+            ++i;
             double currValue = func.value(currPoint);
             while (currValue > prevValue) {
                 step = step / 2;
@@ -35,7 +36,7 @@ public class ConstantStepGDMinimizer implements GDMinimizer {
             prevValue = currValue;
             diff = currPoint.distance(prevPoint);
         }
-
+        System.out.println(this.getClass().getSimpleName() + "steps: " + i);
         return path;
     }
 }
