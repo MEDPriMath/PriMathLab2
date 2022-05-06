@@ -9,14 +9,15 @@ public class Main {
 
     public static void main(String[] args) {
         Engine engine = new Engine();
-        final float meshSize = 200;
+        final float meshSize = 20;
         engine.run(
                 1280,
                 720,
+                false,
                 List.of(Data.TestFunctions),
                 -meshSize/2,
                 -meshSize/2,
                 meshSize,
-                1000);
+                2000);
     }
 }

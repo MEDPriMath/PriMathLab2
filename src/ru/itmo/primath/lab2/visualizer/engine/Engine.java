@@ -34,6 +34,7 @@ public class Engine {
 
     public void run(int windowWidth,
                     int windowHeight,
+                    boolean isFullscreen,
                     List<Function2> meshFunctions,
                     float meshX,
                     float meshY,
@@ -43,7 +44,7 @@ public class Engine {
             throw new IllegalArgumentException("At least one function is required");
         }
 
-        window = new Window(inputService, windowWidth, windowHeight, true);
+        window = new Window(inputService, windowWidth, windowHeight, isFullscreen);
 
         renderer = new Renderer(engineContext.camera);
         engineContext.meshFunctions = meshFunctions;
