@@ -1,10 +1,10 @@
 package ru.itmo.primath.lab2;
 
+import ru.itmo.primath.lab2.math.Path;
 import ru.itmo.primath.lab2.math.Vector2;
 import ru.itmo.primath.lab2.methods.ConstantStepGDMinimizer;
 import ru.itmo.primath.lab2.methods.GoldenRatioGDMinimizer;
 import ru.itmo.primath.lab2.methods.SplitStepGDMinimizer;
-import ru.itmo.primath.lab2.util.Path;
 
 import static ru.itmo.primath.lab2.util.TemporaryFunctionStorage.squareFunction1;
 

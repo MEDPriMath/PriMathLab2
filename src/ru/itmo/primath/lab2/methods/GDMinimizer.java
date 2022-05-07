@@ -1,8 +1,8 @@
 package ru.itmo.primath.lab2.methods;
 
 import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Path;
 import ru.itmo.primath.lab2.math.Vector2;
-import ru.itmo.primath.lab2.util.Path;
 
 
 /**

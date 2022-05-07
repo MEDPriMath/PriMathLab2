@@ -16,6 +16,9 @@ public class EngineContext {
     public Renderable activePath;
     public int activeShaderIndex;
 
+    public int stepSizeExp;
+    public int stepSizeMantis;
+
     EngineContext() {
         camera = new Camera();
     }

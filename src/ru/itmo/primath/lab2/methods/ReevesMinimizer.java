@@ -3,8 +3,8 @@ package ru.itmo.primath.lab2.methods;
 import ru.itmo.primath.lab2.linearminimizers.GoldenRationMinimizer;
 import ru.itmo.primath.lab2.linearminimizers.LinearMinimizerAdapter;
 import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Path;
 import ru.itmo.primath.lab2.math.Vector2;
-import ru.itmo.primath.lab2.util.Path;
 
 public class ReevesMinimizer implements GDMinimizer {
     @Override
@@ -56,5 +56,10 @@ public class ReevesMinimizer implements GDMinimizer {
 
         System.out.println(this.getClass().getSimpleName() + "steps: " + i);
         return path;
+    }
+
+    @Override
+    public String toString() {
+        return "Reeves GD Minimizer";
     }
 }

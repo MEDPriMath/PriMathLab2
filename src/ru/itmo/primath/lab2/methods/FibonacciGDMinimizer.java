@@ -3,40 +3,37 @@ package ru.itmo.primath.lab2.methods;
 import ru.itmo.primath.lab2.linearminimizers.FibonacciMinimizer;
 import ru.itmo.primath.lab2.linearminimizers.LinearMinimizerAdapter;
 import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Path;
 import ru.itmo.primath.lab2.math.Vector2;
-import ru.itmo.primath.lab2.util.Path;
+
+import static java.lang.Math.max;
 
 public class FibonacciGDMinimizer implements GDMinimizer {
 
     @Override
-    public Path minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
+    public Path<Vector2> minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
         Path<Vector2> path = new Path<>();
         path.addPoint(startPoint);
 
-        Vector2 prevPoint = startPoint;
-        Vector2 prevGrad = func.grad(prevPoint);
+        Vector2 x = startPoint;
+        Vector2 gradient = func.grad(x);
 
-        final float range = 2.5f;
+        while (gradient.length() > epsilon && path.length() <= 500) {
+            double range = 10;
+            step = LinearMinimizerAdapter.minimize(new FibonacciMinimizer(), epsilon / max(1, gradient.sqrLength()), 0, range,
+                    x, gradient, func);
 
-        step = LinearMinimizerAdapter.minimize(new FibonacciMinimizer(), epsilon, 0, range,
-                prevPoint, prevGrad, func);
+            x = x.decrease(gradient.multiply(step));
+            gradient = func.grad(x);
 
-        Vector2 currPoint = prevPoint.decrease(prevGrad.multiply(step));
-        path.addPoint(currPoint);
-
-        double diff = currPoint.distance(prevPoint);
-
-        while (diff > epsilon && path.length() < 500) {
-            Vector2 currGrad = func.grad(currPoint);
-            step = LinearMinimizerAdapter.minimize(new FibonacciMinimizer(), epsilon, 0, range,
-                    currPoint, currGrad, func);
-            prevPoint = currPoint;
-            currPoint = prevPoint.decrease(prevGrad.multiply(step));
-            path.addPoint(currPoint);
-            prevGrad = currGrad;
-            diff = currPoint.distance(prevPoint);
+            path.addPoint(x);
         }
 
         return path;
+    }
+
+    @Override
+    public String toString() {
+        return "Fibonacci GD Minimizer";
     }
 }

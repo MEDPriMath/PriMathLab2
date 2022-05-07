@@ -49,7 +49,7 @@ public class Engine {
         renderer = new Renderer(engineContext.camera);
         engineContext.meshFunctions = meshFunctions;
         loadMeshes(meshFunctions, meshX, meshY, meshSize, meshResolution);
-        engineService.chooseMesh(0);
+        engineService.chooseMesh(4);
 
         loop();
 

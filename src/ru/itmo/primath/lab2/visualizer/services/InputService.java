@@ -1,11 +1,36 @@
 package ru.itmo.primath.lab2.visualizer.services;
 
 import org.lwjgl.glfw.GLFW;
-import ru.itmo.primath.lab2.methods.*;
+import ru.itmo.primath.lab2.methods.ConstantStepGDMinimizer;
+import ru.itmo.primath.lab2.methods.FibonacciGDMinimizer;
+import ru.itmo.primath.lab2.methods.GoldenRatioGDMinimizer;
+import ru.itmo.primath.lab2.methods.ReevesMinimizer;
+import ru.itmo.primath.lab2.methods.SplitStepGDMinimizer;
 import ru.itmo.primath.lab2.visualizer.graphics.Camera;
 import ru.itmo.primath.lab2.visualizer.graphics.Direction;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_EQUAL;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_I;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_MINUS;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_O;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_P;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_U;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.glfwGetKey;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.lwjgl.opengl.GL11.glFrustum;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glViewport;
@@ -33,7 +58,7 @@ public class InputService {
             } else switch (key) {
                 case GLFW_KEY_ESCAPE ->
                         glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-                case GLFW_KEY_R -> camera.reset();
+                case GLFW_KEY_R -> engineService.reset();
                 case GLFW_KEY_P -> engineService.activatePath(new ConstantStepGDMinimizer());
                 case GLFW_KEY_O -> engineService.activatePath(new SplitStepGDMinimizer());
                 case GLFW_KEY_I -> engineService.activatePath(new GoldenRatioGDMinimizer());
@@ -41,6 +66,8 @@ public class InputService {
                 case GLFW_KEY_Y -> engineService.activatePath(new ReevesMinimizer());
                 case GLFW_KEY_MINUS -> engineService.previousMeshShader();
                 case GLFW_KEY_EQUAL -> engineService.nextMeshShader();
+                case GLFW_KEY_PAGE_UP -> engineService.increaseStepSize();
+                case GLFW_KEY_PAGE_DOWN -> engineService.decreaseStepSize();
             }
         }
     }

@@ -1,6 +1,7 @@
 package ru.itmo.primath.lab2;
 
 import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Vector2;
 
 import static java.lang.Math.sin;
 import static ru.itmo.primath.lab2.util.MathUtils.sqr;
@@ -12,7 +13,19 @@ public class Data {
             (x, y) -> sin(x) + sin(y),
             (x, y) -> sin(x) * sin(y),
             (x, y) -> (sqr(x/2) + sqr(y/2)) / 4,
-            (x, y) -> (sqr(x/2) + sqr(y/3)) / 4,
+            new Function2() {
+                @Override
+                public double value(double x, double y) {
+                    return 2 * sqr(x) + 3 * sqr(y);
+                }
+
+                @Override
+                public Vector2 grad(double x, double y) {
+                    return new Vector2(8 * x, 18 * y);
+                }
+            },
+
+
             (x, y) -> 1*x*x*y*y + 2*x*x*y + 3*x*x + 4*x + 5*x*y*y + 6*x*y + 7*y*y + 8*y,
 //            new Function2() {
 //                @Override

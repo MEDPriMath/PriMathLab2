@@ -1,8 +1,8 @@
 package ru.itmo.primath.lab2.visualizer.graphics;
 
 import ru.itmo.primath.lab2.math.Function2;
+import ru.itmo.primath.lab2.math.Path;
 import ru.itmo.primath.lab2.math.Vector2;
-import ru.itmo.primath.lab2.util.Path;
 
 import static org.lwjgl.opengl.GL11.GL_LINE_STRIP;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;

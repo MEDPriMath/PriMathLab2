@@ -1,6 +1,4 @@
-package ru.itmo.primath.lab2.util;
-
-import ru.itmo.primath.lab2.math.Vector;
+package ru.itmo.primath.lab2.math;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,7 @@ public class Path<T extends Vector<T>> {
         return path.size();
     }
 
-    public Vector<?> last() {
+    public T last() {
         return path.get(path.size() - 1);
     }
 
