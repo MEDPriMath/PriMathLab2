@@ -9,7 +9,7 @@ import ru.itmo.primath.lab2.math.Vector2;
 public class ReevesMinimizer implements GDMinimizer {
     @Override
     public Path<Vector2> minimize(Function2 func, Vector2 startPoint, double epsilon, double step) {
-        Path<Vector2> path = new Path();
+        Path<Vector2> path = new Path<>();
         path.addPoint(startPoint);
 
         Vector2 prevPoint = startPoint;
