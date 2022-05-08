@@ -4,25 +4,12 @@ import org.junit.jupiter.api.Test;
 import ru.itmo.primath.lab2.util.TemporaryFunctionStorage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class EssentialsTest {
 
     @Test
     public void jupiterTest() {
         assertEquals(4, 2 + 2);
-    }
-
-    @Test
-    public void jupiterTest2() {
-        String danila = "Danila" + 56 + " is a slacker";
-        assertEquals(danila, "Danila56 is a slacker");
-    }
-
-    @Test
-    public void jupiterTest3() {
-        String danila = "Fuck " + "you";
-        assertNotEquals(danila, "No fuck you leatherman");
     }
 
     @Test
